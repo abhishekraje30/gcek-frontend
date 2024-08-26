@@ -1,6 +1,16 @@
 "use client"
-import { AppstoreOutlined, MailOutlined, MenuOutlined, SettingOutlined } from "@ant-design/icons"
+import {
+  AppstoreOutlined,
+  CalendarOutlined,
+  CloseSquareOutlined,
+  HomeOutlined,
+  MailOutlined,
+  MenuOutlined,
+  ProfileOutlined,
+  SettingOutlined,
+} from "@ant-design/icons"
 import { Button, Drawer, Menu, MenuProps } from "antd"
+import Image from "next/image"
 import Link from "next/link"
 import { useState } from "react"
 import { UserButton } from "./UserButton"
@@ -8,72 +18,9 @@ import { UserButton } from "./UserButton"
 type MenuItem = Required<MenuProps>["items"][number]
 
 const items: MenuItem[] = [
-  {
-    key: "grp",
-    label: "Group",
-    type: "group",
-    children: [
-      { key: "13", label: <Link href="/">Home</Link> },
-      { key: "14", label: <Link href="/form">Form Components</Link> },
-      { key: "15", label: <Link href="/table">Table</Link> },
-    ],
-  },
-  {
-    key: "sub1",
-    label: "Navigation One",
-    icon: <MailOutlined />,
-    children: [
-      {
-        key: "g1",
-        label: "Item 1",
-        type: "group",
-        children: [
-          { key: "1", label: "Option 1" },
-          { key: "2", label: "Option 2" },
-        ],
-      },
-      {
-        key: "g2",
-        label: "Item 2",
-        type: "group",
-        children: [
-          { key: "3", label: "Option 3" },
-          { key: "4", label: "Option 4" },
-        ],
-      },
-    ],
-  },
-  {
-    key: "sub2",
-    label: "Navigation Two",
-    icon: <AppstoreOutlined />,
-    children: [
-      { key: "5", label: "Option 5" },
-      { key: "6", label: "Option 6" },
-      {
-        key: "sub3",
-        label: "Submenu",
-        children: [
-          { key: "7", label: "Option 7" },
-          { key: "8", label: "Option 8" },
-        ],
-      },
-    ],
-  },
-  {
-    type: "divider",
-  },
-  {
-    key: "sub4",
-    label: "Navigation Three",
-    icon: <SettingOutlined />,
-    children: [
-      { key: "9", label: "Option 9" },
-      { key: "10", label: "Option 10" },
-      { key: "11", label: "Option 11" },
-      { key: "12", label: "Option 12" },
-    ],
-  },
+  { key: "1", label: <Link href="/">Home</Link>, icon: <HomeOutlined /> },
+  { key: "2", label: <Link href="/profile">Profile</Link>, icon: <ProfileOutlined /> },
+  { key: "3", label: <Link href="/career-calendar">Career Calendar</Link>, icon: <CalendarOutlined /> },
 ]
 
 export default function HeaderSidebar() {
@@ -85,21 +32,36 @@ export default function HeaderSidebar() {
 
   return (
     <div>
-      <header className="sticky left-0 top-0 flex items-center justify-between border-b border-gray-300 p-4 shadow-md">
-        <Button type="primary" onClick={toggleSidebar}>
-          <MenuOutlined />
-        </Button>
+      <header className="sticky left-0 top-0 flex items-center justify-between border-b border-gray-300 p-2 shadow-md">
+        <div className="flex items-center gap-2">
+          <div
+            className="grid size-11 cursor-pointer place-content-center rounded-full hover:bg-gray-300"
+            onClick={toggleSidebar}
+          >
+            <MenuOutlined />
+          </div>
+          <Link href={"/"} className="hidden items-center gap-2 md:flex">
+            <Image src={"/gcek logo.png"} alt="GCEK logo" width={35} height={35} className="size-auto rounded-full" />
+            <span className="ml-1 text-xl font-bold">Government college of engineering, Karad</span>
+          </Link>
+        </div>
+
         <UserButton />
       </header>
 
       <Drawer
         placement="left"
-        title="Company Logo & Title"
+        title="Menu"
         onClose={toggleSidebar}
         open={isSidebarOpen}
-        closable={false}
+        // closable={false}
+        closeIcon={
+          <div>
+            <CloseSquareOutlined />
+          </div>
+        }
       >
-        <Menu defaultSelectedKeys={["1"]} defaultOpenKeys={["sub1"]} mode="inline" items={items} />
+        <Menu defaultSelectedKeys={["1"]} defaultOpenKeys={["1"]} mode="inline" items={items} />
       </Drawer>
     </div>
   )

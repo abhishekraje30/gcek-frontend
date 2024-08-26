@@ -7,25 +7,14 @@ import { signOut, useSession } from "next-auth/react"
 
 export const UserButton = () => {
   const session = useSession()
-  console.log(session)
   const items: MenuProps["items"] = [
     {
       key: "1",
       label: (
         <a target="_blank" rel="noopener noreferrer" href="https://www.antgroup.com">
-          1st menu item
+          Profile
         </a>
       ),
-    },
-    {
-      key: "2",
-      label: (
-        <a target="_blank" rel="noopener noreferrer" href="https://www.aliyun.com">
-          2nd menu item (disabled)
-        </a>
-      ),
-      icon: <SmileOutlined />,
-      disabled: true,
     },
     {
       key: "3",
@@ -42,7 +31,11 @@ export const UserButton = () => {
   return (
     <Dropdown menu={{ items }} placement="bottomLeft" className="cursor-pointer">
       <Space>
-        <Avatar src={session.data?.user?.image ?? "https://i.pravatar.cc/200"} size="large" icon={<UserOutlined />} />
+        {session.data?.user?.image ? (
+          <Avatar src={session.data?.user?.image} size="large" icon={<UserOutlined />} />
+        ) : (
+          <Avatar size="large" icon={<UserOutlined />} />
+        )}
       </Space>
     </Dropdown>
   )

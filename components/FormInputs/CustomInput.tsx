@@ -8,9 +8,17 @@ interface InputFieldProps extends InputProps {
   label: string
   size?: "small" | "large"
   placeholder?: string
+  required?: boolean
 }
 
-export default function CustomTextInput({ control, name, label, placeholder, ...props }: InputFieldProps) {
+export default function CustomTextInput({
+  control,
+  name,
+  label,
+  placeholder,
+  required = false,
+  ...props
+}: InputFieldProps) {
   return (
     <Controller
       name={name}
@@ -18,7 +26,13 @@ export default function CustomTextInput({ control, name, label, placeholder, ...
       render={({ field, fieldState }) => (
         <div>
           <label htmlFor={name} className="text-sm">
-            {label}
+            {required ? (
+              <span>
+                {label} <span className="text-red-500">*</span>
+              </span>
+            ) : (
+              label
+            )}
           </label>
           <Input {...field} {...props} placeholder={placeholder} status={fieldState.error && "error"} />
           {fieldState.error && <p className="text-xs text-red-600">{fieldState.error.message}</p>}
