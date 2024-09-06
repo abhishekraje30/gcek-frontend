@@ -6,8 +6,8 @@ import type { NextAuthConfig } from "next-auth"
 
 import Credentials from "next-auth/providers/credentials"
 import Google from "next-auth/providers/google"
+import { adminApiClient } from "actions/axios-clients"
 import { checkUserExists, createFrappeApiKeys, createFrappeUser } from "actions/register"
-import { adminApiClient } from "configs/axios"
 import { SIGN_IN, SIGN_UP } from "configs/constants"
 
 const config = {

@@ -10,11 +10,7 @@ export const UserButton = () => {
   const items: MenuProps["items"] = [
     {
       key: "1",
-      label: (
-        <a target="_blank" rel="noopener noreferrer" href="https://www.antgroup.com">
-          Profile
-        </a>
-      ),
+      label: <Link href="/profile">Profile</Link>,
     },
     {
       key: "3",

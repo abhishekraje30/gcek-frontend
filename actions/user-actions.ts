@@ -1,5 +1,6 @@
 "use server"
-import { getApiClient } from "./frappe-key-secret"
+
+import { getApiClient } from "./axios-clients"
 
 export const getUsers = async () => {
   const apiClient = await getApiClient()

@@ -8,10 +8,11 @@ interface SingleSelectProps extends SelectProps {
   label: string
   size?: "small" | "large"
   placeholder?: string
-  options: { value: string; label: string; [key: string]: any }[]
+  options: { value: string | number; label: string | number; [key: string]: any }[]
   showSearch?: boolean
   onChange?: (value: any) => void
   onSearch?: (value: string) => void
+  required?: boolean
 }
 
 export default function CustomSingleSelect({
@@ -23,6 +24,7 @@ export default function CustomSingleSelect({
   showSearch = true,
   onChange,
   onSearch,
+  required = false,
   ...props
 }: SingleSelectProps) {
   return (
@@ -31,8 +33,14 @@ export default function CustomSingleSelect({
       control={control}
       render={({ field, fieldState }) => (
         <div>
-          <label htmlFor={name} className="text-sm">
-            {label}
+          <label htmlFor={name} className="block text-sm">
+            {required ? (
+              <span>
+                {label} <span className="text-red-500">*</span>
+              </span>
+            ) : (
+              label
+            )}
           </label>
           <Select
             {...field}

@@ -11,6 +11,7 @@ import { register } from "actions/register"
 import AlertNotification from "components/AlertNotification"
 import CustomTextInput from "components/FormInputs/CustomInput"
 import CustomPasswordInput from "components/FormInputs/CustomPasswordInput"
+import CustomRadioSelect from "components/FormInputs/CustomRadioSelect"
 import { SignUpSchema } from "configs/schemas"
 
 export default function SignUp() {
@@ -26,6 +27,7 @@ export default function SignUp() {
       email: "",
       password: "",
       confirmPassword: "",
+      role: "Student",
     },
     mode: "onBlur",
   })
@@ -54,6 +56,21 @@ export default function SignUp() {
         <CustomTextInput name="email" control={control} label="Email" type="email" />
         <CustomPasswordInput name="password" control={control} label="Password" />
         <CustomPasswordInput name="confirmPassword" control={control} label="Confirm Password" />
+        <CustomRadioSelect
+          name="role"
+          control={control}
+          label="Are you a student or a alumni?"
+          options={[
+            {
+              label: "Student",
+              value: "Student",
+            },
+            {
+              label: "Alumini",
+              value: "Alumini",
+            },
+          ]}
+        />
         <AlertNotification message={message} status={status} />
         <Button type="link">
           <Link href={"/auth/sign-in"}>Already a user? sign in</Link>
@@ -63,7 +80,6 @@ export default function SignUp() {
         </Button>
       </form>
       <Divider style={{ borderColor: "#492971" }}>Or</Divider>
-      {/* Google Button */}
       <Button
         type="default"
         size="large"

@@ -9,9 +9,17 @@ interface DateFieldProps extends DatePickerProps {
   label: string
   size?: "small" | "large"
   placeholder?: string
+  required?: boolean
 }
 
-export default function CustomDateInput({ control, name, label, placeholder, ...props }: DateFieldProps) {
+export default function CustomDateInput({
+  control,
+  name,
+  label,
+  placeholder,
+  required = false,
+  ...props
+}: DateFieldProps) {
   return (
     <Controller
       name={name}
@@ -19,7 +27,13 @@ export default function CustomDateInput({ control, name, label, placeholder, ...
       render={({ field, fieldState }) => (
         <div>
           <label htmlFor={name} className="block text-sm">
-            {label}
+            {required ? (
+              <span>
+                {label} <span className="text-red-500">*</span>
+              </span>
+            ) : (
+              label
+            )}
           </label>
           <DatePicker
             {...field}
@@ -29,6 +43,7 @@ export default function CustomDateInput({ control, name, label, placeholder, ...
             onChange={(date: Dayjs) => field.onChange(date ? date.toDate() : null)} // Convert Dayjs to Date for React Hook Form
             format={"DD-MM-YYYY"}
             status={fieldState.error && "error"}
+            className="!w-full"
           />
           {fieldState.error && <p className="text-xs text-red-600">{fieldState.error.message}</p>}
         </div>

@@ -2,8 +2,8 @@
 
 import bcrypt from "bcryptjs"
 import * as z from "zod"
-import { adminApiClient } from "configs/axios"
 import { SignUpSchema } from "configs/schemas"
+import { adminApiClient } from "./axios-clients"
 
 export const checkUserExists = async (email: string): Promise<boolean> => {
   try {
@@ -31,7 +31,7 @@ export const checkNextAuthUserExists = async (email: string): Promise<boolean> =
   }
 }
 
-export const createFrappeUser = async (email: string, firstName: string, lastName: string) => {
+export const createFrappeUser = async (email: string, firstName: string, lastName: string, role: string) => {
   await adminApiClient.post("/document/User", {
     email,
     first_name: firstName,
@@ -39,9 +39,13 @@ export const createFrappeUser = async (email: string, firstName: string, lastNam
     enabled: 1,
     roles: [
       {
-        role: "User",
+        role: role,
+      },
+      {
+        role: "System Manager",
       },
     ],
+    send_welcome_email: 0,
   })
 }
 
@@ -59,7 +63,7 @@ export const createFrappeApiKeys = async (email: string) => {
 }
 
 export const register = async (values: z.infer<typeof SignUpSchema>) => {
-  const { email, password, firstName, lastName } = values
+  const { email, password, firstName, lastName, role } = values
 
   try {
     // Check if the user exists
@@ -80,7 +84,7 @@ export const register = async (values: z.infer<typeof SignUpSchema>) => {
     }
 
     if (!userExists) {
-      await createFrappeUser(email, firstName, lastName)
+      await createFrappeUser(email, firstName, lastName, role)
       await createFrappeApiKeys(email)
       await createNextAuthUser(email, hashedPassword)
     }
