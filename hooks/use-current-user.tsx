@@ -5,3 +5,9 @@ export const useCurrentUser = () => {
 
   return session.data?.userInfo
 }
+
+export const useGetCurrentUserRole = () => {
+  const session = useSession()
+  const roles = session.data?.userInfo?.roles
+  return roles.map((role: any) => role.role)
+}

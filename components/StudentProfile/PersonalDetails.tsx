@@ -19,7 +19,7 @@ const getDefaultValues = (userInfo: any) => {
     first_name: userInfo?.first_name ?? "",
     last_name: userInfo?.last_name ?? "",
     email: userInfo?.email ?? "",
-    mobile_no: userInfo?.mobile_no ?? "",
+    phone: userInfo?.phone ?? "",
     birth_date: userInfo?.birth_date
       ? new Date(userInfo.birth_date)
       : new Date(new Date().setFullYear(new Date().getFullYear() - 18)),
@@ -121,7 +121,7 @@ export default function PersonalDetails({
           </div>
           <div className="flex-1">
             <CustomTextInput
-              name="mobile_no"
+              name="phone"
               control={control}
               label="Mobile Number"
               type="tel"

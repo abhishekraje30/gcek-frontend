@@ -68,7 +68,9 @@ export default function MyCustomForm() {
     },
     mode: "onBlur",
   })
-  const onSubmit: SubmitHandler<zod.infer<typeof customValidationSchema>> = (data) => {}
+  const onSubmit: SubmitHandler<zod.infer<typeof customValidationSchema>> = (data) => {
+    console.log(data)
+  }
 
   return (
     <form onSubmit={handleSubmit(onSubmit)} className="flex flex-col gap-2">

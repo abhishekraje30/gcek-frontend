@@ -1,10 +1,11 @@
 "use client"
 import { Button, Card, Divider, Progress } from "antd"
 import Link from "next/link"
-import HeaderSidebar from "components/HeaderSidebar"
-import { useCurrentUser } from "hooks/use-current-user"
-import { useGetOrCreateData } from "hooks/useCRUD"
 import { useState } from "react"
+import HeaderSidebar from "components/HeaderSidebar"
+import { STUDENT_ROLE } from "configs/constants"
+import { useCurrentUser, useGetCurrentUserRole } from "hooks/use-current-user"
+import { useGetOrCreateData } from "hooks/useCRUD"
 
 // export const metadata: Metadata = {
 //   title: "Home",
@@ -12,9 +13,11 @@ import { useState } from "react"
 
 export default function Web() {
   const user = useCurrentUser()
+  const userRoles = useGetCurrentUserRole()
   const [loading, setLoading] = useState(false)
-  const { data: studentProfileData } = useGetOrCreateData(`/document/Student Profile`, user?.email, {
-    student_email_id: user?.email,
+  const profileUrl = `/document/${userRoles.includes(STUDENT_ROLE) ? "Student" : "Alumini"} Profile`
+  const { data: studentProfileData } = useGetOrCreateData(profileUrl, user?.email, {
+    profile_email_id: user?.email,
   })
   const profileCompleteness = studentProfileData?.profile_completeness
   return (

@@ -1,9 +1,8 @@
 "use client"
 import { zodResolver } from "@hookform/resolvers/zod"
-import { Button, Divider } from "antd"
+import { Button } from "antd"
 import Image from "next/image"
 import Link from "next/link"
-import { signIn } from "next-auth/react"
 import { useState, useTransition } from "react"
 import { SubmitHandler, useForm } from "react-hook-form"
 import * as zod from "zod"
@@ -12,12 +11,11 @@ import AlertNotification from "components/AlertNotification"
 import CustomTextInput from "components/FormInputs/CustomInput"
 import CustomPasswordInput from "components/FormInputs/CustomPasswordInput"
 import CustomRadioSelect from "components/FormInputs/CustomRadioSelect"
+import { ALUMINI_ROLE, SIGN_IN, STUDENT_ROLE } from "configs/constants"
 import { SignUpSchema } from "configs/schemas"
-import { SIGN_IN } from "configs/constants"
 
 export default function SignUp() {
   const [isPending, startTransition] = useTransition()
-  const [loading, setLoading] = useState(false)
   const [status, setStatus] = useState<string | null>("")
   const [message, setMessage] = useState<string | React.ReactNode>("")
   const { control, handleSubmit } = useForm({
@@ -28,7 +26,7 @@ export default function SignUp() {
       email: "",
       password: "",
       confirmPassword: "",
-      role: "Student",
+      role: STUDENT_ROLE,
     },
     mode: "onBlur",
   })
@@ -83,18 +81,18 @@ export default function SignUp() {
           label="Are you a student or a alumni?"
           options={[
             {
-              label: "Student",
-              value: "Student",
+              label: STUDENT_ROLE,
+              value: STUDENT_ROLE,
             },
             {
-              label: "Alumini",
-              value: "Alumini",
+              label: ALUMINI_ROLE,
+              value: ALUMINI_ROLE,
             },
           ]}
         />
         <AlertNotification message={message} status={status} />
         <Button type="link">
-          <Link href={"/auth/sign-in"}>Already a user? sign in</Link>
+          <Link href={SIGN_IN}>Already a user? sign in</Link>
         </Button>
         <Button type="primary" size="large" htmlType="submit" loading={isPending}>
           Submit

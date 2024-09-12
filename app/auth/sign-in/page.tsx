@@ -1,6 +1,6 @@
 "use client"
 import { zodResolver } from "@hookform/resolvers/zod"
-import { Button, Divider, Radio, RadioChangeEvent } from "antd"
+import { Button } from "antd"
 import Image from "next/image"
 import Link from "next/link"
 import { useRouter } from "next/navigation"
@@ -11,12 +11,12 @@ import * as zod from "zod"
 import AlertNotification from "components/AlertNotification"
 import CustomTextInput from "components/FormInputs/CustomInput"
 import CustomPasswordInput from "components/FormInputs/CustomPasswordInput"
+import Loader from "components/Loader"
+import { RESET_PASSWORD, SIGN_UP } from "configs/constants"
 import { SignInSchema } from "configs/schemas"
-import { SIGN_IN, SIGN_UP } from "configs/constants"
 
 export default function SignIn() {
-  const [role, setRole] = useState("Student")
-  const [loading, setLoading] = useState(false)
+  const [globalLoading, setGlobalLoading] = useState(false)
   const [status, setStatus] = useState<string | null>("")
   const [message, setMessage] = useState<string | React.ReactNode>("")
   const [isPending, setIsPending] = useState(false)
@@ -72,6 +72,10 @@ export default function SignIn() {
     }
   }
 
+  if (globalLoading) {
+    return <Loader />
+  }
+
   return (
     <div className="flex flex-col rounded-xl border border-gray-300 p-6 shadow-md">
       <div className="mb-2 flex justify-center">
@@ -87,7 +91,9 @@ export default function SignIn() {
         <div
           className="mb-2 mt-1 cursor-pointer text-right text-xs text-blue-500 hover:text-blue-600 hover:underline"
           onClick={() => {
-            router.push("/auth/forgot-password")
+            setGlobalLoading(true)
+            router.push(RESET_PASSWORD)
+            setGlobalLoading(false)
           }}
         >
           Forgot password?

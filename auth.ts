@@ -14,7 +14,7 @@ import {
   createFrappeUser,
   createNextAuthUser,
 } from "actions/register"
-import { SIGN_IN, SIGN_UP } from "configs/constants"
+import { SIGN_IN, SIGN_UP, STUDENT_ROLE } from "configs/constants"
 
 const config = {
   pages: {
@@ -66,7 +66,7 @@ const config = {
         const gmail = user?.email ?? ""
         const userExists = await checkUserExists(gmail)
         if (!userExists) {
-          await createFrappeUser(gmail, user?.name ?? "", "", "Student")
+          await createFrappeUser(gmail, user?.name ?? "", "", STUDENT_ROLE)
           await createFrappeApiKeys(gmail)
         }
         const nextAuthUserExists = await checkNextAuthUserExists(gmail)

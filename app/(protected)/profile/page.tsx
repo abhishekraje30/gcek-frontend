@@ -1,28 +1,32 @@
 "use client"
 
-import { Steps, StepsProps, Tabs, TabsProps } from "antd"
+import { Steps, StepsProps } from "antd"
 import { useState } from "react"
+import AluminiDetails from "components/AluminiProfile/AluminiDetails"
 import AcademicDetails from "components/StudentProfile/AcademicDetails"
 import PersonalDetails from "components/StudentProfile/PersonalDetails"
-import { useCurrentUser } from "hooks/use-current-user"
+import { STUDENT_ROLE } from "configs/constants"
+import { useCurrentUser, useGetCurrentUserRole } from "hooks/use-current-user"
 import { useGetData, useGetOrCreateData, useUpdateData } from "hooks/useCRUD"
 
 export default function Profile() {
   const [current, setCurrent] = useState(0)
 
   const user = useCurrentUser()
+  const userRoles = useGetCurrentUserRole()
   const userUrl = `/document/User/${user?.email}`
   const userMetadataUrl = `/document/NextAuthUser/${user?.email}`
-  const studentProfileUrl = `/document/Student Profile/${user?.email}`
+  const profileUrl = `/document/${userRoles.includes(STUDENT_ROLE) ? "Student" : "Alumini"} Profile`
   const { data: userData } = useGetData(userUrl)
   const { data: userMetadata } = useGetData(userMetadataUrl)
-  const { data: studentProfileData } = useGetOrCreateData(`/document/Student Profile`, user?.email, {
-    student_email_id: user?.email,
+  const { data: userProfileData } = useGetOrCreateData(profileUrl, user?.email, {
+    profile_email_id: user?.email,
   })
-  const profileData = { ...userData, ...userMetadata, ...studentProfileData }
+  const profileData = { ...userData, ...userMetadata, ...userProfileData }
   const { update: updateUserData } = useUpdateData(userUrl)
   const { update: updateUserMetadata } = useUpdateData(userMetadataUrl)
-  const { update: updateStudentProfile } = useUpdateData(studentProfileUrl)
+  const { update: updateStudentProfile } = useUpdateData(`${profileUrl}/${user?.email}`)
+  const { update: updateAluminiProfile } = useUpdateData(`${profileUrl}/${user?.email}`)
   const items: StepsProps["items"] = [
     {
       title: "Personal Details",
@@ -32,7 +36,7 @@ export default function Profile() {
     },
   ]
 
-  const content = [
+  const StudentProfileContent = [
     {
       key: 0,
       children: (
@@ -61,8 +65,18 @@ export default function Profile() {
 
   return (
     <main className="grid place-content-center p-2">
-      <Steps current={current} items={items} />
-      <div className="grid place-content-center p-4 shadow-md">{content[current]?.children}</div>
+      {userRoles.includes(STUDENT_ROLE) ? (
+        <>
+          <Steps current={current} items={items} />
+          <div className="grid place-content-center p-4 shadow-md">{StudentProfileContent[current]?.children}</div>
+        </>
+      ) : (
+        <AluminiDetails
+          profileData={profileData}
+          updateUserData={updateUserData}
+          updateAluminiProfile={updateAluminiProfile}
+        />
+      )}
     </main>
   )
 }
