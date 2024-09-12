@@ -90,3 +90,11 @@ export const resetPassword = async (email: string, password: string) => {
   }
   return { status: "success", message: "Password reset successfully" }
 }
+
+export const isUserVerified = async (email: string) => {
+  const response = await adminApiClient.get(`/document/NextAuthUser/${email}`)
+  if (response.status !== 200) {
+    return false
+  }
+  return Boolean(response.data.data.email_verified)
+}

@@ -104,7 +104,7 @@ export default function SignIn() {
             Submit
           </Button>
           <Button type="link">
-            <Link href={"/auth/sign-up"}>New to Site? Create account</Link>
+            <Link href={SIGN_UP}>New to Site? Create account</Link>
           </Button>
         </div>
       </form>

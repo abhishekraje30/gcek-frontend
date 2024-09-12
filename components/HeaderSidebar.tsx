@@ -7,6 +7,7 @@ import { usePathname } from "next/navigation"
 import { useState } from "react"
 import Loader from "./Loader"
 import { UserButton } from "./UserButton"
+import { CAREER_CALENDAR_ROUTE, HOME_ROUTE, PROFILE_ROUTE } from "configs/constants"
 
 type MenuItem = Required<MenuProps>["items"][number]
 
@@ -29,7 +30,7 @@ export default function HeaderSidebar() {
     {
       key: "/",
       label: (
-        <Link href="/" onClick={handleLinkClick}>
+        <Link href={HOME_ROUTE} onClick={handleLinkClick}>
           Home
         </Link>
       ),
@@ -38,7 +39,7 @@ export default function HeaderSidebar() {
     {
       key: "/profile",
       label: (
-        <Link href="/profile" onClick={handleLinkClick}>
+        <Link href={PROFILE_ROUTE} onClick={handleLinkClick}>
           Profile
         </Link>
       ),
@@ -47,7 +48,7 @@ export default function HeaderSidebar() {
     {
       key: "/career-calendar",
       label: (
-        <Link href="/career-calendar" onClick={handleLinkClick}>
+        <Link href={CAREER_CALENDAR_ROUTE} onClick={handleLinkClick}>
           Career Calendar
         </Link>
       ),

@@ -3,7 +3,7 @@ import { Button, Card, Divider, Progress } from "antd"
 import Link from "next/link"
 import { useState } from "react"
 import HeaderSidebar from "components/HeaderSidebar"
-import { STUDENT_ROLE } from "configs/constants"
+import { PROFILE_ROUTE, STUDENT_ROLE } from "configs/constants"
 import { useCurrentUser, useGetCurrentUserRole } from "hooks/use-current-user"
 import { useGetOrCreateData } from "hooks/useCRUD"
 
@@ -35,7 +35,7 @@ export default function Web() {
             </div>
             <Divider />
             <div className="mx-auto grid place-content-center">
-              <Link href="/profile">
+              <Link href={PROFILE_ROUTE}>
                 <Button type="primary" loading={loading} onClick={() => setLoading(true)}>
                   {profileCompleteness !== 100 ? "Complete Profile" : "View or Update Profile"}
                 </Button>
