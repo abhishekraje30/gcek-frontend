@@ -20,7 +20,6 @@ export default function Profile() {
     student_email_id: user?.email,
   })
   const profileData = { ...userData, ...userMetadata, ...studentProfileData }
-  console.log("profileData", profileData)
   const { update: updateUserData } = useUpdateData(userUrl)
   const { update: updateUserMetadata } = useUpdateData(userMetadataUrl)
   const { update: updateStudentProfile } = useUpdateData(studentProfileUrl)

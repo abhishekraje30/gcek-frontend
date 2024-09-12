@@ -12,6 +12,7 @@ import CustomTextInput from "components/FormInputs/CustomInput"
 import CustomRadioSelect from "components/FormInputs/CustomRadioSelect"
 import { genderOptions } from "configs/constants"
 import { StudentPersonalDetailsSchema } from "configs/schemas"
+import { getFrappeDate } from "utils/frappe-datatypes"
 
 const getDefaultValues = (userInfo: any) => {
   return {
@@ -67,7 +68,7 @@ export default function PersonalDetails({
     setLoading(true)
     const formattedData = {
       ...data,
-      birth_date: new Date(data.birth_date).toISOString().split("T")[0],
+      birth_date: getFrappeDate(data.birth_date),
     }
     try {
       await updateUserData(formattedData)

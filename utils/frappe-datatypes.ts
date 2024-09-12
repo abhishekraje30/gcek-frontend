@@ -1,15 +1,20 @@
-export const convertToFrappeDatetime = (datetime: Date): string => {
-  // Extract each component separately
-  const year = datetime.getFullYear()
-  const month = String(datetime.getMonth() + 1).padStart(2, "0") // getMonth() returns 0-indexed months
-  const day = String(datetime.getDate()).padStart(2, "0")
-  const hours = String(datetime.getHours()).padStart(2, "0")
-  const minutes = String(datetime.getMinutes()).padStart(2, "0")
-  const seconds = String(datetime.getSeconds()).padStart(2, "0")
+export const getFrappeDate = (date: Date): string => {
+  const year = date.getFullYear()
+  const month = String(date.getMonth() + 1).padStart(2, "0")
+  const day = String(date.getDate()).padStart(2, "0")
+  return `${year}-${month}-${day}`
+}
 
-  // Form the date string in 'YYYY-MM-DD HH:MM:SS' format
-  const expiresDate = `${year}-${month}-${day}`
-  const expiresTime = `${hours}:${minutes}:${seconds}`
+export const getFrappeTime = (date: Date): string => {
+  const hours = String(date.getHours()).padStart(2, "0")
+  const minutes = String(date.getMinutes()).padStart(2, "0")
+  const seconds = String(date.getSeconds()).padStart(2, "0")
+  return `${hours}:${minutes}:${seconds}`
+}
+
+export const convertToFrappeDatetime = (datetime: Date): string => {
+  const expiresDate = getFrappeDate(datetime)
+  const expiresTime = getFrappeTime(datetime)
   const expires = `${expiresDate} ${expiresTime}`
   return expires
 }

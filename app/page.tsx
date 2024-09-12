@@ -4,6 +4,7 @@ import Link from "next/link"
 import HeaderSidebar from "components/HeaderSidebar"
 import { useCurrentUser } from "hooks/use-current-user"
 import { useGetOrCreateData } from "hooks/useCRUD"
+import { useState } from "react"
 
 // export const metadata: Metadata = {
 //   title: "Home",
@@ -11,10 +12,10 @@ import { useGetOrCreateData } from "hooks/useCRUD"
 
 export default function Web() {
   const user = useCurrentUser()
+  const [loading, setLoading] = useState(false)
   const { data: studentProfileData } = useGetOrCreateData(`/document/Student Profile`, user?.email, {
     student_email_id: user?.email,
   })
-  console.log(studentProfileData)
   const profileCompleteness = studentProfileData?.profile_completeness
   return (
     <>
@@ -32,7 +33,7 @@ export default function Web() {
             <Divider />
             <div className="mx-auto grid place-content-center">
               <Link href="/profile">
-                <Button type="primary">
+                <Button type="primary" loading={loading} onClick={() => setLoading(true)}>
                   {profileCompleteness !== 100 ? "Complete Profile" : "View or Update Profile"}
                 </Button>
               </Link>
