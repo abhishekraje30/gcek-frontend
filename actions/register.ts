@@ -1,7 +1,9 @@
 "use server"
 
 import bcrypt from "bcryptjs"
+import { v4 as uuid } from "uuid"
 import * as z from "zod"
+import { NEXT_PUBLIC_BASE_URL } from "configs/constants"
 import { SignUpSchema } from "configs/schemas"
 import { adminApiClient } from "./axios-clients"
 
@@ -50,10 +52,21 @@ export const createFrappeUser = async (email: string, firstName: string, lastNam
 }
 
 export const createNextAuthUser = async (email: string, hashedPassword: string) => {
+  const token = uuid()
   await adminApiClient.post("/document/NextAuthUser", {
     linked_user: email,
     hashed_password: hashedPassword,
+    email_verification_token: token,
+    email_verified: false,
   })
+  await adminApiClient.post(
+    "/method/nextintegration.next_integration.doctype.nextauthuser.api.trigger_next_user_verification",
+    {
+      email: email,
+      verification_link: `${NEXT_PUBLIC_BASE_URL}/auth/verify-account?token=${token}`,
+      sent_by: "GCEK Placement Team",
+    }
+  )
 }
 
 export const createFrappeApiKeys = async (email: string) => {

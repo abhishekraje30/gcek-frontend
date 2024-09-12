@@ -37,14 +37,7 @@ export default function SignUp() {
       const response = await register(values)
       setStatus(response.status)
       if (response.status === "success") {
-        setMessage(
-          <>
-            <span>Account created successfully. Please </span>
-            <Link href={SIGN_IN} className="text-blue-600 hover:underline">
-              Sign in here
-            </Link>
-          </>
-        )
+        setMessage("Verification email sent. Please check your email to verify your account.")
       } else {
         if (response.message === "ExistingUser") {
           setMessage(
