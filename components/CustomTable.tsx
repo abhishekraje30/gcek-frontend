@@ -1,9 +1,9 @@
 "use client"
 import { SyncOutlined } from "@ant-design/icons"
-import { getUsers } from "actions/user-actions"
-import { Button, Flex, Table, Tag, Tooltip } from "antd"
+import { Button, Table, Tag, Tooltip } from "antd"
 import type { TableColumnsType, TableProps } from "antd"
 import React, { useEffect, useState } from "react"
+import { getUsers } from "actions/user-actions"
 
 type TableRowSelection<T extends object = object> = TableProps<T>["rowSelection"]
 
@@ -50,7 +50,6 @@ export default function CustomTable() {
   }
 
   const onSelectChange = (newSelectedRowKeys: React.Key[]) => {
-    console.log("selectedRowKeys changed: ", newSelectedRowKeys)
     setSelectedRowKeys(newSelectedRowKeys)
   }
 

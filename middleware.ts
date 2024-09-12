@@ -4,7 +4,7 @@ import { auth } from "auth"
 export default auth((req) => {
   const pathname = req.nextUrl.pathname
   // Define protected routes
-  const protectedRoutes = ["/protected", "/form"]
+  const protectedRoutes = ["/", "/protected"]
 
   // Check if the user is authenticated. If auth is null then the user is not authenticated
   const isAuthenticated = !!req.auth

@@ -1,48 +1,38 @@
 "use client"
 
-import { DownOutlined, LogoutOutlined, SmileOutlined, UserOutlined } from "@ant-design/icons"
-import { Avatar, Dropdown, Menu, MenuProps, Space } from "antd"
+import { LogoutOutlined, UserOutlined } from "@ant-design/icons"
+import { Avatar, Dropdown, MenuProps, Space } from "antd"
 import Link from "next/link"
 import { signOut, useSession } from "next-auth/react"
+import { RESET_PASSWORD, SIGN_IN } from "configs/constants"
 
 export const UserButton = () => {
   const session = useSession()
-  console.log(session)
   const items: MenuProps["items"] = [
     {
       key: "1",
-      label: (
-        <a target="_blank" rel="noopener noreferrer" href="https://www.antgroup.com">
-          1st menu item
-        </a>
-      ),
+      label: <Link href="/profile">Profile</Link>,
     },
     {
       key: "2",
-      label: (
-        <a target="_blank" rel="noopener noreferrer" href="https://www.aliyun.com">
-          2nd menu item (disabled)
-        </a>
-      ),
-      icon: <SmileOutlined />,
-      disabled: true,
+      label: <Link href={RESET_PASSWORD}>Change Password</Link>,
     },
     {
       key: "3",
-      label: <Link href="/auth/change-password">Change Password</Link>,
-    },
-    {
-      key: "4",
       danger: true,
       icon: <LogoutOutlined />,
       label: "Logout",
-      onClick: () => signOut({ callbackUrl: "/auth/sign-in" }),
+      onClick: () => signOut({ callbackUrl: SIGN_IN }),
     },
   ]
   return (
     <Dropdown menu={{ items }} placement="bottomLeft" className="cursor-pointer">
       <Space>
-        <Avatar src={session.data?.user?.image ?? "https://i.pravatar.cc/200"} size="large" icon={<UserOutlined />} />
+        {session.data?.user?.image ? (
+          <Avatar src={session.data?.user?.image} size="large" icon={<UserOutlined />} />
+        ) : (
+          <Avatar size="large" icon={<UserOutlined />} />
+        )}
       </Space>
     </Dropdown>
   )

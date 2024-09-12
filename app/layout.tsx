@@ -6,8 +6,8 @@ import { SessionProvider } from "next-auth/react"
 import { auth } from "auth"
 
 export const metadata: Metadata = {
-  title: "NextJs Frappe Integration",
-  description: "Next.js Frappe integration boilerplate with Tailwind CSS and Ant Design",
+  title: "GCEK Placement Portal",
+  description: "Government College of Engineering, Karad. Placement Portal",
   icons: {
     icon: "/favicon.ico",
   },

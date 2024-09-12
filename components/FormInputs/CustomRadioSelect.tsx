@@ -9,9 +9,18 @@ interface RadioSelectProps extends RadioGroupProps {
   size?: "small" | "large"
   options: { value: string; label: string; [key: string]: any }[]
   onChange?: (value: any) => void
+  required?: boolean
 }
 
-export default function CustomRadioSelect({ control, name, label, options, onChange, ...props }: RadioSelectProps) {
+export default function CustomRadioSelect({
+  control,
+  name,
+  label,
+  options,
+  onChange,
+  required = false,
+  ...props
+}: RadioSelectProps) {
   return (
     <Controller
       name={name}
@@ -19,7 +28,13 @@ export default function CustomRadioSelect({ control, name, label, options, onCha
       render={({ field, fieldState }) => (
         <div className="flex flex-col gap-2">
           <label htmlFor={name} className="text-sm">
-            {label}
+            {required ? (
+              <span>
+                {label} <span className="text-red-500">*</span>
+              </span>
+            ) : (
+              label
+            )}
           </label>
           <Radio.Group
             {...field}
