@@ -1,33 +1,62 @@
 "use client"
-import {
-  AppstoreOutlined,
-  CalendarOutlined,
-  CloseSquareOutlined,
-  HomeOutlined,
-  MailOutlined,
-  MenuOutlined,
-  ProfileOutlined,
-  SettingOutlined,
-} from "@ant-design/icons"
-import { Button, Drawer, Menu, MenuProps } from "antd"
+import { CalendarOutlined, CloseSquareOutlined, HomeOutlined, MenuOutlined, ProfileOutlined } from "@ant-design/icons"
+import { Drawer, Menu, MenuProps } from "antd"
 import Image from "next/image"
 import Link from "next/link"
+import { usePathname } from "next/navigation"
 import { useState } from "react"
+import Loader from "./Loader"
 import { UserButton } from "./UserButton"
 
 type MenuItem = Required<MenuProps>["items"][number]
 
-const items: MenuItem[] = [
-  { key: "1", label: <Link href="/">Home</Link>, icon: <HomeOutlined /> },
-  { key: "2", label: <Link href="/profile">Profile</Link>, icon: <ProfileOutlined /> },
-  { key: "3", label: <Link href="/career-calendar">Career Calendar</Link>, icon: <CalendarOutlined /> },
-]
-
 export default function HeaderSidebar() {
+  const pathname = usePathname()
   const [isSidebarOpen, setIsSidebarOpen] = useState(false)
+  const [loading, setLoading] = useState(false)
 
   const toggleSidebar = () => {
     setIsSidebarOpen(!isSidebarOpen)
+  }
+
+  const handleLinkClick = () => {
+    setLoading(true)
+    setIsSidebarOpen(false)
+    setLoading(false)
+  }
+
+  const items: MenuItem[] = [
+    {
+      key: "/",
+      label: (
+        <Link href="/" onClick={handleLinkClick}>
+          Home
+        </Link>
+      ),
+      icon: <HomeOutlined />,
+    },
+    {
+      key: "/profile",
+      label: (
+        <Link href="/profile" onClick={handleLinkClick}>
+          Profile
+        </Link>
+      ),
+      icon: <ProfileOutlined />,
+    },
+    {
+      key: "/career-calendar",
+      label: (
+        <Link href="/career-calendar" onClick={handleLinkClick}>
+          Career Calendar
+        </Link>
+      ),
+      icon: <CalendarOutlined />,
+    },
+  ]
+
+  const getSelectedKeys = () => {
+    return items.find((item) => item?.key === pathname)?.key
   }
 
   return (
@@ -49,6 +78,8 @@ export default function HeaderSidebar() {
         <UserButton />
       </header>
 
+      {loading && <Loader />}
+
       <Drawer
         placement="left"
         title="Menu"
@@ -61,7 +92,12 @@ export default function HeaderSidebar() {
           </div>
         }
       >
-        <Menu defaultSelectedKeys={["1"]} defaultOpenKeys={["1"]} mode="inline" items={items} />
+        <Menu
+          defaultOpenKeys={["1"]}
+          mode="inline"
+          items={items}
+          selectedKeys={[getSelectedKeys() || "/"].map(String)}
+        />
       </Drawer>
     </div>
   )

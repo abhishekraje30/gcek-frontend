@@ -82,8 +82,8 @@ export default function AcademicDetails({
             options={branchOptions}
           />
         </div>
-        <div className="flex flex-1 gap-2">
-          <div>
+        <div className="flex flex-1 flex-col gap-2 md:flex-row">
+          <div className="flex-1">
             <CustomSingleSelect
               name="joining_year"
               control={control}
@@ -93,7 +93,7 @@ export default function AcademicDetails({
               options={getYearList()}
             />
           </div>
-          <div>
+          <div className="flex-1">
             <CustomSingleSelect
               name="passing_year"
               control={control}

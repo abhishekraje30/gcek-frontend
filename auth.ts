@@ -7,7 +7,13 @@ import type { NextAuthConfig } from "next-auth"
 import Credentials from "next-auth/providers/credentials"
 import Google from "next-auth/providers/google"
 import { adminApiClient } from "actions/axios-clients"
-import { checkUserExists, createFrappeApiKeys, createFrappeUser } from "actions/register"
+import {
+  checkNextAuthUserExists,
+  checkUserExists,
+  createFrappeApiKeys,
+  createFrappeUser,
+  createNextAuthUser,
+} from "actions/register"
 import { SIGN_IN, SIGN_UP } from "configs/constants"
 
 const config = {
@@ -16,12 +22,21 @@ const config = {
   },
 
   providers: [
-    Google,
+    Google({
+      authorization: {
+        params: {
+          state: true,
+        },
+      },
+    }),
     Credentials({
       async authorize(credentials) {
         const { email, password } = credentials
         const nextAuthUserRes = await adminApiClient.get(`/document/NextAuthUser/${email}`)
         const { data } = nextAuthUserRes.data
+        if (data.hashed_password === "Social Login") {
+          throw new Error("Social Login")
+        }
         const passwordsMatch = await bcrypt.compare(password as string, data.hashed_password as string)
 
         if (passwordsMatch) {
@@ -46,27 +61,21 @@ const config = {
     Callbacks allow you to implement access controls without a database and to integrate with external databases or APIs. */
     async signIn({ user, account, profile, email, credentials }) {
       /* Use the signIn() callback to control if a user is allowed to sign in. */
-      console.log({ user, account, profile, email, credentials })
 
       if (account?.provider === "google") {
         const gmail = user?.email ?? ""
         const userExists = await checkUserExists(gmail)
         if (!userExists) {
-          await createFrappeUser(gmail, user?.name ?? "", "")
+          await createFrappeUser(gmail, user?.name ?? "", "", "Student")
           await createFrappeApiKeys(gmail)
+        }
+        const nextAuthUserExists = await checkNextAuthUserExists(gmail)
+        if (!nextAuthUserExists) {
+          await createNextAuthUser(gmail, "Social Login")
         }
         return true
       }
-
-      const isAllowedToSignIn = true
-      if (isAllowedToSignIn) {
-        return true
-      } else {
-        // Return false to display a default error message
-        return false
-        // Or you can return a URL to redirect to:
-        // return '/unauthorized'
-      }
+      return true
     },
     async redirect({ url, baseUrl }) {
       /* The redirect callback is called anytime the user is redirected to a callback URL (e.g. on signin or signout).
@@ -105,7 +114,6 @@ const config = {
       Requests to /api/auth/signin, /api/auth/session and calls to getSession(), getServerSession(), useSession() will invoke this function, but only if you are using a JWT session.      
       This method is not invoked when you persist sessions in a database.
       The returned value will be encrypted, and it is stored in a cookie. */
-      console.log({ token, trigger, session, account, user })
       // Persist the OAuth access_token and or the user id to the token right after signin
       if (account?.provider === "google") {
         token.accessToken = account.access_token

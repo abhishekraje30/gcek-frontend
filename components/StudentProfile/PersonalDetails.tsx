@@ -72,7 +72,7 @@ export default function PersonalDetails({
     try {
       await updateUserData(formattedData)
       await updateUserMetadata(formattedData)
-      await updateStudentProfile({ profile_completeness: 50 })
+      await updateStudentProfile({ profile_completeness: 50, ...formattedData })
       setTab(currentTab + 1)
     } catch (error) {
       console.error("Error updating profile:", error)
@@ -105,7 +105,7 @@ export default function PersonalDetails({
   return (
     <div className="">
       <form onSubmit={handleSubmit(onSubmit)} className="flex flex-col gap-2">
-        <div className="flex justify-between gap-2">
+        <div className="flex flex-col justify-between gap-2 md:flex-row">
           <div className="flex-1">
             <CustomTextInput name="first_name" control={control} label="First Name" required />
           </div>
@@ -114,7 +114,7 @@ export default function PersonalDetails({
           </div>
         </div>
 
-        <div className="flex justify-between gap-2">
+        <div className="flex flex-col justify-between gap-2 md:flex-row">
           <div className="flex-1">
             <CustomTextInput name="email" control={control} label="Email" type="email" disabled required />
           </div>
@@ -130,7 +130,7 @@ export default function PersonalDetails({
           </div>
         </div>
 
-        <div className="flex gap-2">
+        <div className="flex flex-col gap-2 md:flex-row">
           <div className="flex-1">
             <CustomDateInput name="birth_date" control={control} label="Date of birth" required allowClear={false} />
           </div>
@@ -139,7 +139,7 @@ export default function PersonalDetails({
           </div>
         </div>
 
-        <div className="flex gap-2">
+        <div className="flex flex-col gap-2 md:flex-row">
           <div className="flex-1">
             <CustomTextInput name="house_details" control={control} label="Flat no., Apartment" />
           </div>
@@ -148,7 +148,7 @@ export default function PersonalDetails({
           </div>
         </div>
 
-        <div className="flex gap-2">
+        <div className="flex flex-col gap-2 md:flex-row">
           <div className="flex-1">
             <CustomTextInput
               name="pincode"

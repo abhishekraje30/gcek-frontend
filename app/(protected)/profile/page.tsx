@@ -5,7 +5,7 @@ import { useState } from "react"
 import AcademicDetails from "components/StudentProfile/AcademicDetails"
 import PersonalDetails from "components/StudentProfile/PersonalDetails"
 import { useCurrentUser } from "hooks/use-current-user"
-import { useGetData, useUpdateData } from "hooks/useCRUD"
+import { useGetData, useGetOrCreateData, useUpdateData } from "hooks/useCRUD"
 
 export default function Profile() {
   const [current, setCurrent] = useState(0)
@@ -16,8 +16,11 @@ export default function Profile() {
   const studentProfileUrl = `/document/Student Profile/${user?.email}`
   const { data: userData } = useGetData(userUrl)
   const { data: userMetadata } = useGetData(userMetadataUrl)
-  const { data: studentProfileData } = useGetData(studentProfileUrl)
+  const { data: studentProfileData } = useGetOrCreateData(`/document/Student Profile`, user?.email, {
+    student_email_id: user?.email,
+  })
   const profileData = { ...userData, ...userMetadata, ...studentProfileData }
+  console.log("profileData", profileData)
   const { update: updateUserData } = useUpdateData(userUrl)
   const { update: updateUserMetadata } = useUpdateData(userMetadataUrl)
   const { update: updateStudentProfile } = useUpdateData(studentProfileUrl)

@@ -73,7 +73,7 @@ export const register = async (values: z.infer<typeof SignUpSchema>) => {
     if (userExists && nextAuthUserExists) {
       return {
         status: "error",
-        message: "User already exists. Please login or reset password",
+        message: "ExistingUser",
       }
     }
 

@@ -34,7 +34,6 @@ export default function CustomTable() {
   useEffect(() => {
     const fetchUser = async () => {
       const userData = await getUsers()
-      console.log(userData)
     }
 
     fetchUser()
@@ -50,7 +49,6 @@ export default function CustomTable() {
   }
 
   const onSelectChange = (newSelectedRowKeys: React.Key[]) => {
-    console.log("selectedRowKeys changed: ", newSelectedRowKeys)
     setSelectedRowKeys(newSelectedRowKeys)
   }
 

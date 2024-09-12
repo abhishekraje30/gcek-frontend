@@ -1,9 +1,17 @@
 import useSWR, { mutate } from "swr"
-import { createData, deleteData, getData, updateData } from "actions/crud-actions"
+import { createData, deleteData, getData, getOrCreateData, updateData } from "actions/crud-actions"
 
 // Hook for reading documents
 export const useGetData = (url: string) => {
   const { data, error, isLoading } = useSWR(url, getData)
+
+  return { data, error, isLoading }
+}
+
+// Custom hook to get or create data
+export const useGetOrCreateData = (baseURL: string, id: string, createObject: any) => {
+  const url = `${baseURL}/${id}`
+  const { data, error, isLoading } = useSWR(url, () => getOrCreateData(baseURL, id, createObject))
 
   return { data, error, isLoading }
 }
