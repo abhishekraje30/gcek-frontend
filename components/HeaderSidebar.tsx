@@ -4,10 +4,12 @@ import { Drawer, Menu, MenuProps } from "antd"
 import Image from "next/image"
 import Link from "next/link"
 import { usePathname } from "next/navigation"
+import { useRouter } from "next/navigation"
 import { useState } from "react"
+import { CAREER_CALENDAR_ROUTE, HOME_ROUTE, PROFILE_ROUTE, UNVERIFIED } from "configs/constants"
+import { useIsUserVerified } from "hooks/use-current-user"
 import Loader from "./Loader"
 import { UserButton } from "./UserButton"
-import { CAREER_CALENDAR_ROUTE, HOME_ROUTE, PROFILE_ROUTE } from "configs/constants"
 
 type MenuItem = Required<MenuProps>["items"][number]
 
@@ -15,9 +17,16 @@ export default function HeaderSidebar() {
   const pathname = usePathname()
   const [isSidebarOpen, setIsSidebarOpen] = useState(false)
   const [loading, setLoading] = useState(false)
+  const router = useRouter()
+  const IsUserVerified = useIsUserVerified()
 
   const toggleSidebar = () => {
     setIsSidebarOpen(!isSidebarOpen)
+  }
+
+  if (!IsUserVerified) {
+    // Redirect to 'notverified' page if email is not verified
+    router.push(UNVERIFIED)
   }
 
   const handleLinkClick = () => {
@@ -28,7 +37,7 @@ export default function HeaderSidebar() {
 
   const items: MenuItem[] = [
     {
-      key: "/",
+      key: HOME_ROUTE,
       label: (
         <Link href={HOME_ROUTE} onClick={handleLinkClick}>
           Home
@@ -37,7 +46,7 @@ export default function HeaderSidebar() {
       icon: <HomeOutlined />,
     },
     {
-      key: "/profile",
+      key: PROFILE_ROUTE,
       label: (
         <Link href={PROFILE_ROUTE} onClick={handleLinkClick}>
           Profile
@@ -46,7 +55,7 @@ export default function HeaderSidebar() {
       icon: <ProfileOutlined />,
     },
     {
-      key: "/career-calendar",
+      key: CAREER_CALENDAR_ROUTE,
       label: (
         <Link href={CAREER_CALENDAR_ROUTE} onClick={handleLinkClick}>
           Career Calendar

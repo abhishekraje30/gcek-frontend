@@ -18,7 +18,7 @@ import { SIGN_IN, SIGN_UP, STUDENT_ROLE } from "configs/constants"
 
 const config = {
   pages: {
-    signIn: "/auth/sign-in",
+    signIn: SIGN_IN,
   },
 
   providers: [
@@ -47,6 +47,7 @@ const config = {
             first_name: userInfo.first_name,
             last_name: userInfo.last_name,
             email: userInfo.email,
+            email_verified: data.email_verified,
             roles: userInfo.roles,
             api_key: userInfo.api_key,
             api_secret: api_secret,
@@ -77,30 +78,30 @@ const config = {
       }
       return true
     },
-    async redirect({ url, baseUrl }) {
-      /* The redirect callback is called anytime the user is redirected to a callback URL (e.g. on signin or signout).
-     By default, only URLs on the same URL as the site are allowed. You can use the redirect callback to customize that behavior.
+    // async redirect({ url, baseUrl }) {
+    //   /* The redirect callback is called anytime the user is redirected to a callback URL (e.g. on signin or signout).
+    //  By default, only URLs on the same URL as the site are allowed. You can use the redirect callback to customize that behavior.
 
-     NOTE: The redirect callback may be invoked more than once in the same flow. */
+    //  NOTE: The redirect callback may be invoked more than once in the same flow. */
 
-      // Redirect to baseUrl if the target URL is the sign-in or sign-up page
-      if ([`${baseUrl}/${SIGN_IN}`, `${baseUrl}/${SIGN_UP}`].includes(url)) {
-        return baseUrl
-      }
+    //   // Redirect to baseUrl if the target URL is the sign-in or sign-up page
+    //   if ([`${baseUrl}/${SIGN_IN}`, `${baseUrl}/${SIGN_UP}`].includes(url)) {
+    //     return baseUrl
+    //   }
 
-      // Allow relative callback URLs
-      if (url.startsWith("/")) {
-        return `${baseUrl}${url}`
-      }
+    //   // Allow relative callback URLs
+    //   if (url.startsWith("/")) {
+    //     return `${baseUrl}${url}`
+    //   }
 
-      // Allow callback URLs on the same origin
-      if (new URL(url).origin === baseUrl) {
-        return url
-      }
+    //   // Allow callback URLs on the same origin
+    //   if (new URL(url).origin === baseUrl) {
+    //     return url
+    //   }
 
-      // Default redirect to baseUrl for any other cases
-      return baseUrl
-    },
+    //   // Default redirect to baseUrl for any other cases
+    //   return baseUrl
+    // },
 
     authorized({ request, auth }) {
       // used in between signin and redirect
@@ -136,6 +137,7 @@ const config = {
         // Attach userInfo to the token if it's the initial sign-in
         token.userInfo = user
       }
+
       return token
     },
     async session({ session, token }) {

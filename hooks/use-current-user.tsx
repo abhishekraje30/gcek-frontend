@@ -11,3 +11,8 @@ export const useGetCurrentUserRole = () => {
   const roles = session.data?.userInfo?.roles
   return roles.map((role: any) => role.role)
 }
+
+export const useIsUserVerified = () => {
+  const { data, status } = useSession()
+  return { emailVerified: data?.userInfo?.email_verified, status }
+}

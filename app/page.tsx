@@ -24,7 +24,7 @@ export default function Web() {
     <>
       <HeaderSidebar />
       <main className="mt-2">
-        <div className="mx-auto mt-4 w-3/4 md:w-1/4">
+        <div className="mx-auto mt-4 w-3/4">
           <Card title={<span className="flex justify-center text-lg font-bold">Profile Completion</span>}>
             <div className="grid place-content-center">
               <Progress

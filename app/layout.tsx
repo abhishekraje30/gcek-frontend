@@ -4,6 +4,7 @@ import { Poppins, Roboto } from "next/font/google"
 import "styles/tailwind.css"
 import { SessionProvider } from "next-auth/react"
 import { auth } from "auth"
+import { UNVERIFIED } from "configs/constants"
 
 export const metadata: Metadata = {
   title: "GCEK Placement Portal",
@@ -27,6 +28,7 @@ const roboto = Roboto({
 
 export default async function RootLayout({ children }: { children: React.ReactNode }) {
   const session = await auth()
+
   return (
     <html lang="en">
       <AntdRegistry>
