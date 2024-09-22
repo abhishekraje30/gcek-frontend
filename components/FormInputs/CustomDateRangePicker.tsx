@@ -1,36 +1,26 @@
 "use client"
-import { DatePicker, DatePickerProps } from "antd"
-import dayjs from "dayjs"
-import { Control, Controller } from "react-hook-form"
-
-interface DateFieldProps extends Omit<DatePickerProps, "locale" | "generateConfig" | "hideHeader"> {
-  control: Control<any>
-  name: string
-  label: string
-  size?: "small" | "large"
-}
+import { DatePicker } from "antd"
+import { Controller } from "react-hook-form"
 
 const { RangePicker } = DatePicker
 
-export default function CustomDateRangeInput({ control, name, label }: DateFieldProps) {
+export default function CustomDateRangeInput({ control, name, label, required, ...props }: any) {
   return (
     <Controller
       name={name}
       control={control}
       render={({ field, fieldState }) => (
         <div>
-          <label htmlFor={name} className="block text-sm">
-            {label}
+          <label htmlFor={name} className="text-sm">
+            {required ? (
+              <span>
+                {label} <span className="text-red-500">*</span>
+              </span>
+            ) : (
+              label
+            )}
           </label>
-          <RangePicker
-            {...field}
-            format={"DD-MM-YYYY"}
-            value={field.value ? [dayjs(field.value[0]), dayjs(field.value[1])] : null}
-            onChange={(dates) => {
-              const value = dates ? [dates[0]?.toDate(), dates[1]?.toDate()] : null
-              field.onChange(value)
-            }}
-          />
+          <RangePicker className="!w-full" {...field} {...props} />
           {fieldState.error && <p className="text-xs text-red-600">{fieldState.error.message}</p>}
         </div>
       )}

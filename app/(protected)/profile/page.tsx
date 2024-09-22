@@ -4,7 +4,12 @@ import { Steps, StepsProps } from "antd"
 import { useState } from "react"
 import AluminiDetails from "components/AluminiProfile/AluminiDetails"
 import AcademicDetails from "components/StudentProfile/AcademicDetails"
+import InternshipTrainingDetails from "components/StudentProfile/InternshipTrainingDetails"
 import PersonalDetails from "components/StudentProfile/PersonalDetails"
+import ProfessionalSummary from "components/StudentProfile/ProfessionalSummary"
+import ProfilePicture from "components/StudentProfile/ProfilePicture"
+import ProjectDetails from "components/StudentProfile/ProjectDetails"
+import SkillDetails from "components/StudentProfile/SkillDetails"
 import { STUDENT_ROLE } from "configs/constants"
 import { useCurrentUser, useGetCurrentUserRole } from "hooks/use-current-user"
 import { useGetData, useGetOrCreateData, useUpdateData } from "hooks/useCRUD"
@@ -34,6 +39,21 @@ export default function Profile() {
     {
       title: "Academic Details",
     },
+    {
+      title: "Professional Summary",
+    },
+    {
+      title: "Skills",
+    },
+    {
+      title: "Project Details",
+    },
+    {
+      title: "Internship/Training Details",
+    },
+    {
+      title: "Profile Photo",
+    },
   ]
 
   const StudentProfileContent = [
@@ -61,15 +81,75 @@ export default function Profile() {
         />
       ),
     },
+    {
+      key: 2,
+      children: (
+        <ProfessionalSummary
+          currentTab={current}
+          setTab={setCurrent}
+          updateStudentProfile={updateStudentProfile}
+          profileData={profileData}
+        />
+      ),
+    },
+    {
+      key: 3,
+      children: (
+        <SkillDetails
+          currentTab={current}
+          setTab={setCurrent}
+          updateStudentProfile={updateStudentProfile}
+          profileData={profileData}
+        />
+      ),
+    },
+    {
+      key: 4,
+      children: (
+        <ProjectDetails
+          currentTab={current}
+          setTab={setCurrent}
+          updateStudentProfile={updateStudentProfile}
+          profileData={profileData}
+        />
+      ),
+    },
+    {
+      key: 5,
+      children: (
+        <InternshipTrainingDetails
+          currentTab={current}
+          setTab={setCurrent}
+          updateStudentProfile={updateStudentProfile}
+          profileData={profileData}
+        />
+      ),
+    },
+    {
+      key: 6,
+      children: (
+        <ProfilePicture
+          currentTab={current}
+          setTab={setCurrent}
+          updateStudentProfile={updateStudentProfile}
+          profileData={profileData}
+        />
+      ),
+    },
   ]
 
   return (
     <main className="grid place-content-center p-2">
       {userRoles.includes(STUDENT_ROLE) ? (
-        <>
-          <Steps current={current} items={items} />
-          <div className="grid place-content-center p-4 shadow-md">{StudentProfileContent[current]?.children}</div>
-        </>
+        <div className="flex flex-col gap-4">
+          <div className="flex-1">
+            <Steps current={current} items={items} />
+          </div>
+
+          <div className="flex flex-1 items-center justify-center p-4 shadow-md">
+            {StudentProfileContent[current]?.children}
+          </div>
+        </div>
       ) : (
         <AluminiDetails
           profileData={profileData}

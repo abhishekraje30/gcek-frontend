@@ -26,3 +26,14 @@ export const genderOptions = [
     value: "Other",
   },
 ]
+
+export const markingSystemOptions = [
+  {
+    label: "Percentage",
+    value: "Percentage",
+  },
+  {
+    label: "CGPA",
+    value: "CGPA",
+  },
+]

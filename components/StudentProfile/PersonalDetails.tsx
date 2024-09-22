@@ -8,8 +8,8 @@ import * as zod from "zod"
 import { fetcher } from "actions/user-actions"
 import AlertNotification from "components/AlertNotification"
 import CustomDateInput from "components/FormInputs/CustomDate"
-import CustomTextInput from "components/FormInputs/CustomInput"
 import CustomRadioSelect from "components/FormInputs/CustomRadioSelect"
+import CustomTextInput from "components/FormInputs/CustomTextInput"
 import { genderOptions } from "configs/constants"
 import { StudentPersonalDetailsSchema } from "configs/schemas"
 import { getFrappeDate } from "utils/frappe-datatypes"
@@ -73,7 +73,7 @@ export default function PersonalDetails({
     try {
       await updateUserData(formattedData)
       await updateUserMetadata(formattedData)
-      await updateStudentProfile({ profile_completeness: 50, ...formattedData })
+      await updateStudentProfile({ profile_completeness: 10, ...formattedData })
       setTab(currentTab + 1)
     } catch (error) {
       console.error("Error updating profile:", error)
@@ -104,8 +104,8 @@ export default function PersonalDetails({
     setPincodeLoading(false)
   }
   return (
-    <div className="">
-      <form onSubmit={handleSubmit(onSubmit)} className="flex flex-col gap-2">
+    <div className="flex-1">
+      <form onSubmit={handleSubmit(onSubmit)} className="flex flex-col gap-6">
         <div className="flex flex-col justify-between gap-2 md:flex-row">
           <div className="flex-1">
             <CustomTextInput name="first_name" control={control} label="First Name" required />
@@ -133,7 +133,14 @@ export default function PersonalDetails({
 
         <div className="flex flex-col gap-2 md:flex-row">
           <div className="flex-1">
-            <CustomDateInput name="birth_date" control={control} label="Date of birth" required allowClear={false} />
+            <CustomDateInput
+              name="birth_date"
+              control={control}
+              label="Date of birth"
+              required
+              allowClear={false}
+              format={"DD-MM-YYYY"}
+            />
           </div>
           <div className="flex-1">
             <CustomRadioSelect name="gender" control={control} label="Gender" options={genderOptions} required />

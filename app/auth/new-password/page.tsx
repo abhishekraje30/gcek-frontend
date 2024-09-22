@@ -2,9 +2,9 @@
 import { useRouter, useSearchParams } from "next/navigation"
 import { useEffect, useState } from "react"
 import { verifyToken } from "actions/verification-token"
+import { UNAUTHORIZED } from "configs/constants"
 import Loader from "../../../components/Loader"
 import NewPassword from "../../../components/NewPassword"
-import { UNAUTHORIZED } from "configs/constants"
 
 export default function ChangePassword() {
   const [validToken, setValidToken] = useState(false)

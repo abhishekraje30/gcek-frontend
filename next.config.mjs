@@ -12,6 +12,7 @@ const config = withPlugins([[withBundleAnalyzer({ enabled: env.ANALYZE })]], {
       fullUrl: true,
     },
   },
+
   experimental: { instrumentationHook: false },
   rewrites() {
     return [

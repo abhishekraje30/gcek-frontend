@@ -21,8 +21,11 @@ export default function Web() {
   })
   const profileCompleteness = studentProfileData?.profile_completeness
   return (
-    <>
-      <HeaderSidebar />
+    <div className="flex flex-col">
+      <div className="flex-1">
+        <HeaderSidebar />
+      </div>
+
       <main className="mt-2">
         <div className="mx-auto mt-4 w-3/4">
           <Card title={<span className="flex justify-center text-lg font-bold">Profile Completion</span>}>
@@ -44,6 +47,6 @@ export default function Web() {
           </Card>
         </div>
       </main>
-    </>
+    </div>
   )
 }

@@ -41,7 +41,6 @@ export default function CustomDateInput({
             placeholder={placeholder}
             value={field.value ? dayjs(field.value) : null} // Convert Date to Dayjs for the DatePicker
             onChange={(date: Dayjs) => field.onChange(date ? date.toDate() : null)} // Convert Dayjs to Date for React Hook Form
-            format={"DD-MM-YYYY"}
             status={fieldState.error && "error"}
             className="!w-full"
           />

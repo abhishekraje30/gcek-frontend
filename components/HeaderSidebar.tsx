@@ -70,7 +70,7 @@ export default function HeaderSidebar() {
   }
 
   return (
-    <div>
+    <div className="flex-1">
       <header className="sticky left-0 top-0 flex items-center justify-between border-b border-gray-300 p-2 shadow-md">
         <div className="flex items-center gap-2">
           <div

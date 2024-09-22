@@ -8,7 +8,7 @@ import { SubmitHandler, useForm } from "react-hook-form"
 import * as zod from "zod"
 import { verifyEmailandGenerateToken } from "actions/verification-token"
 import AlertNotification from "components/AlertNotification"
-import CustomTextInput from "components/FormInputs/CustomInput"
+import CustomTextInput from "components/FormInputs/CustomTextInput"
 
 const resetPasswordSchema = zod.object({
   email: zod.string().email({

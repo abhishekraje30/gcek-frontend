@@ -12,6 +12,7 @@ interface MultiSelectProps extends SelectProps {
   showSearch?: boolean
   onChange?: (value: any) => void
   onSearch?: (value: string) => void
+  required?: boolean
 }
 
 export default function CustomMultiSelect({
@@ -20,6 +21,7 @@ export default function CustomMultiSelect({
   label,
   placeholder,
   options,
+  required,
   showSearch = true,
   onChange,
   onSearch,
@@ -32,7 +34,13 @@ export default function CustomMultiSelect({
       render={({ field, fieldState }) => (
         <div>
           <label htmlFor={name} className="text-sm">
-            {label}
+            {required ? (
+              <span>
+                {label} <span className="text-red-500">*</span>
+              </span>
+            ) : (
+              label
+            )}
           </label>
           <Select
             {...field}
