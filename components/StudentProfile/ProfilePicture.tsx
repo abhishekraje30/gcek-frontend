@@ -1,13 +1,14 @@
 "use client"
 import { Button, Slider } from "antd"
+import Image from "next/image"
 import React, { useCallback, useState } from "react"
 import Dropzone from "react-dropzone"
 import Cropper from "react-easy-crop"
 import { uploadFile } from "actions/file-upload"
-import getCroppedImg from "./profile-picture.logic"
 import AlertNotification from "components/AlertNotification"
 import { useCurrentUser } from "hooks/use-current-user"
-import Image from "next/image"
+import getCroppedImg from "./profile-picture.logic"
+import { deleteData } from "actions/crud-actions"
 
 const ProfilePicture = ({
   currentTab,
@@ -21,6 +22,7 @@ const ProfilePicture = ({
   profileData: any
 }) => {
   const [loading, setLoading] = useState(false)
+  const [changePhotoLoading, setChangePhotoLoading] = useState(false)
   const [message, setMessage] = useState("")
   const [status, setStatus] = useState("")
   const [imageSrc, setImageSrc] = useState<string | null>(null)
@@ -30,7 +32,6 @@ const ProfilePicture = ({
   const [croppedImage, setCroppedImage] = useState<any>(null)
 
   const userInfo = useCurrentUser()
-  console.log(userInfo)
 
   // Handle file input
   const onDrop = (acceptedFiles: any) => {
@@ -68,6 +69,7 @@ const ProfilePicture = ({
       const formattedData = {
         ...profileData,
         profile_photo: data.file_url,
+        profile_photo_id: data.name,
       }
       await updateStudentProfile(formattedData)
       setMessage("Profile updated successfully")
@@ -78,6 +80,20 @@ const ProfilePicture = ({
       setStatus("error")
       setLoading(false)
     }
+  }
+
+  const handleChangePhoto = async () => {
+    setImageSrc(null)
+    setCroppedImage(null)
+    setChangePhotoLoading(true)
+    const { profile_photo_id } = profileData
+    await deleteData(`document/File/${profile_photo_id}`)
+    await updateStudentProfile({
+      ...profileData,
+      profile_photo: "",
+      profile_photo_id: "",
+    })
+    setChangePhotoLoading(false)
   }
 
   return (
@@ -104,25 +120,44 @@ const ProfilePicture = ({
           </Button>
         </div>
       ) : (
-        // Image upload interface
-        <Dropzone onDrop={onDrop} accept={{ "image/*": [] }}>
-          {({ getRootProps, getInputProps }) => (
-            <div className="flex flex-col gap-6">
-              <div
-                {...getRootProps()}
-                className="flex h-60 w-[50rem] cursor-pointer flex-col items-center justify-center rounded-lg border-2 border-dashed border-gray-300 bg-gray-50 p-5 shadow-lg transition duration-300 hover:border-blue-500 hover:bg-blue-50"
-              >
-                <input {...getInputProps()} />
-                <p className="text-gray-500">Drag and drop an image, or click to select one</p>
+        <>
+          {profileData?.profile_photo ? (
+            <div className="flex flex-col items-center justify-center gap-2">
+              <div className="mb-4 grid size-[300px] place-content-center overflow-hidden rounded-full border-2 border-gray-300">
+                <Image
+                  src={`${process.env.NEXT_PUBLIC_FRAPPE_DOMAIN_NAME}${profileData?.profile_photo}`}
+                  alt="Profile Photo"
+                  width={300}
+                  height={300}
+                />
               </div>
-              <div className="flex justify-end gap-2">
-                <Button type="primary" htmlType="button" onClick={() => setTab(currentTab - 1)}>
-                  Prev
+              <div>
+                <Button type="primary" htmlType="button" onClick={handleChangePhoto} loading={changePhotoLoading}>
+                  Change Profile Photo
                 </Button>
               </div>
             </div>
+          ) : (
+            <Dropzone onDrop={onDrop} accept={{ "image/*": [] }} maxSize={5242880}>
+              {({ getRootProps, getInputProps }) => (
+                <div className="flex flex-col gap-6">
+                  <div
+                    {...getRootProps()}
+                    className="flex h-60 w-[50rem] cursor-pointer flex-col items-center justify-center rounded-lg border-2 border-dashed border-gray-300 bg-gray-50 p-5 shadow-lg transition duration-300 hover:border-blue-500 hover:bg-blue-50"
+                  >
+                    <input {...getInputProps()} />
+                    <p className="text-gray-500">Drag and drop an image, or click to select one</p>
+                  </div>
+                  <div className="flex justify-end gap-2">
+                    <Button type="primary" htmlType="button" onClick={() => setTab(currentTab - 1)}>
+                      Prev
+                    </Button>
+                  </div>
+                </div>
+              )}
+            </Dropzone>
           )}
-        </Dropzone>
+        </>
       )}
 
       {/* Preview of cropped image */}

@@ -14,6 +14,9 @@ const config = withPlugins([[withBundleAnalyzer({ enabled: env.ANALYZE })]], {
   },
 
   experimental: { instrumentationHook: false },
+  images: {
+    domains: ["127.0.0.1", "gcek-placements.frappe.cloud"],
+  },
   rewrites() {
     return [
       { source: "/healthz", destination: "/api/health" },
