@@ -18,6 +18,7 @@ export const verifyEmailandGenerateToken = async (email: string) => {
     const updateResponse = await adminApiClient.patch(`/document/NextAuthUser/${email}`, {
       password_reset_token: token,
       expires_on: expires,
+      is_valid: true,
     })
     if (updateResponse.status !== 200) {
       return { status: "error", message: "Failed to send verification email" }
@@ -60,13 +61,40 @@ export const verifyToken = async (token: string) => {
   return { valid: true, email: user.name }
 }
 
+export const verifyAccount = async (token: string) => {
+  const response = await adminApiClient.get(
+    `/document/NextAuthUser?fields=["name"]&filters=[["email_verification_token", "=", "${token}"]]`
+  )
+  if (response.status !== 200) {
+    return { valid: false, email: "" }
+  }
+  const users = response.data.data
+  if (users.length !== 1) {
+    return { valid: false, email: "" }
+  }
+  const user = users[0]
+  await adminApiClient.patch(`/document/NextAuthUser/${user.name}`, {
+    email_verified: true,
+  })
+  return { valid: true }
+}
+
 export const resetPassword = async (email: string, password: string) => {
   const hashedPassword = await bcrypt.hash(password, 10)
-  const response = await adminApiClient.put(`/document/NextAuthUser/${email}`, {
+  const response = await adminApiClient.patch(`/document/NextAuthUser/${email}`, {
     hashed_password: hashedPassword,
+    is_valid: false,
   })
   if (response.status !== 200) {
     return { status: "error", message: "Failed to reset password" }
   }
   return { status: "success", message: "Password reset successfully" }
+}
+
+export const isUserVerified = async (email: string) => {
+  const response = await adminApiClient.get(`/document/NextAuthUser/${email}`)
+  if (response.status !== 200) {
+    return false
+  }
+  return Boolean(response.data.data.email_verified)
 }

@@ -1,5 +1,6 @@
 import { Button, Result } from "antd"
 import Link from "next/link"
+import { HOME_ROUTE } from "configs/constants"
 
 export default function Unauthorised() {
   return (
@@ -9,7 +10,7 @@ export default function Unauthorised() {
       subTitle="Sorry, you are not authorized to access this page."
       extra={
         <Button type="primary">
-          <Link href="/">Back Home</Link>
+          <Link href={HOME_ROUTE}>Back Home</Link>
         </Button>
       }
     />

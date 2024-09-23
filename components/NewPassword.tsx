@@ -2,6 +2,7 @@
 
 import { zodResolver } from "@hookform/resolvers/zod"
 import { Button } from "antd"
+import Image from "next/image"
 import { useRouter } from "next/navigation"
 import { useState } from "react"
 import { useForm } from "react-hook-form"
@@ -43,6 +44,10 @@ export default function NewPassword({ email }: { email: string }) {
 
   return (
     <div className="flex flex-col rounded-xl border border-gray-300 p-6 shadow-md">
+      <div className="mb-2 flex justify-center">
+        <Image src="/gcek logo.png" alt="Logo" width={60} height={60} priority />
+      </div>
+      <h1 className="mb-2 text-center text-lg font-bold">Set New Password</h1>
       <form onSubmit={handleSubmit(onSubmit)} className="flex flex-col gap-2">
         <CustomPasswordInput name="password" control={control} label="New Password" />
         <CustomPasswordInput name="password_confirmation" control={control} label="Confirm password" />

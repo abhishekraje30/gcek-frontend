@@ -9,8 +9,8 @@ import { useState } from "react"
 import { SubmitHandler, useForm } from "react-hook-form"
 import * as zod from "zod"
 import AlertNotification from "components/AlertNotification"
-import CustomTextInput from "components/FormInputs/CustomInput"
 import CustomPasswordInput from "components/FormInputs/CustomPasswordInput"
+import CustomTextInput from "components/FormInputs/CustomTextInput"
 import Loader from "components/Loader"
 import { RESET_PASSWORD, SIGN_UP } from "configs/constants"
 import { SignInSchema } from "configs/schemas"
@@ -104,7 +104,7 @@ export default function SignIn() {
             Submit
           </Button>
           <Button type="link">
-            <Link href={"/auth/sign-up"}>New to Site? Create account</Link>
+            <Link href={SIGN_UP}>New to Site? Create account</Link>
           </Button>
         </div>
       </form>

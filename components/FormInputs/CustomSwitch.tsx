@@ -9,17 +9,24 @@ interface CustomSwitchProps extends SwitchProps {
   size?: "small"
   defaultChecked?: boolean
   onChange?: (value: any) => void
+  required?: boolean
 }
 
-export default function CustomSwitch({ control, name, label, onChange, ...props }: CustomSwitchProps) {
+export default function CustomSwitch({ control, name, label, required, onChange, ...props }: CustomSwitchProps) {
   return (
     <Controller
       name={name}
       control={control}
       render={({ field, fieldState }) => (
         <div className="flex flex-col gap-1">
-          <label htmlFor={name} className="text-sm">
-            {label}
+          <label htmlFor={name} className="block text-sm  font-semibold">
+            {required ? (
+              <span>
+                {label} <span className="text-red-500">*</span>
+              </span>
+            ) : (
+              label
+            )}
           </label>
           <Switch
             {...field}

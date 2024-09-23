@@ -10,15 +10,29 @@ interface CheckBoxGroupProps extends CheckboxProps {
   onChange?: (value: any) => void
 }
 
-export default function CustomCheckBoxGroup({ control, name, label, options, onChange, ...props }: CheckBoxGroupProps) {
+export default function CustomCheckBoxGroup({
+  control,
+  name,
+  label,
+  options,
+  required,
+  onChange,
+  ...props
+}: CheckBoxGroupProps) {
   return (
     <Controller
       name={name}
       control={control}
       render={({ field, fieldState }) => (
         <div className="flex flex-col gap-2">
-          <label htmlFor={name} className="text-sm">
-            {label}
+          <label htmlFor={name} className="text-sm font-semibold">
+            {required ? (
+              <span>
+                {label} <span className="text-red-500">*</span>
+              </span>
+            ) : (
+              label
+            )}
           </label>
           <Checkbox.Group
             {...field}

@@ -27,6 +27,7 @@ const roboto = Roboto({
 
 export default async function RootLayout({ children }: { children: React.ReactNode }) {
   const session = await auth()
+
   return (
     <html lang="en">
       <AntdRegistry>

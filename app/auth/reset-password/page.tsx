@@ -2,12 +2,13 @@
 
 import { zodResolver } from "@hookform/resolvers/zod"
 import { Button } from "antd"
+import Image from "next/image"
 import { useState } from "react"
 import { SubmitHandler, useForm } from "react-hook-form"
 import * as zod from "zod"
 import { verifyEmailandGenerateToken } from "actions/verification-token"
 import AlertNotification from "components/AlertNotification"
-import CustomTextInput from "components/FormInputs/CustomInput"
+import CustomTextInput from "components/FormInputs/CustomTextInput"
 
 const resetPasswordSchema = zod.object({
   email: zod.string().email({
@@ -42,7 +43,10 @@ export default function ResetPassword() {
   }
 
   return (
-    <div className="mx-auto mt-4 w-1/2 rounded-2xl border border-gray-300 p-4 shadow-md">
+    <div className="mx-auto mt-4 w-full rounded-2xl border border-gray-300 p-4 shadow-md md:w-1/2">
+      <div className="mb-2 flex justify-center">
+        <Image src="/gcek logo.png" alt="Logo" width={60} height={60} priority />
+      </div>
       <h1 className="text-center text-lg font-bold">Reset Password</h1>
       <form onSubmit={handleSubmit(onSubmit)} className="flex flex-col gap-4">
         <div>
@@ -57,7 +61,7 @@ export default function ResetPassword() {
         <AlertNotification message={message} status={status} />
         <div className="flex justify-end">
           <Button type="primary" htmlType="submit" loading={isPending}>
-            Verify Email
+            {status === "success" ? "Reverify Email" : "Verify Email"}
           </Button>
         </div>
       </form>

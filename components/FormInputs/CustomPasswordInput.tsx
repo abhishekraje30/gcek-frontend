@@ -9,15 +9,21 @@ interface PasswordProps extends GetProps<typeof Input.Password> {
   placeholder?: string
 }
 
-export default function CustomPasswordInput({ control, name, label, placeholder, ...props }: PasswordProps) {
+export default function CustomPasswordInput({ control, name, label, placeholder, required, ...props }: PasswordProps) {
   return (
     <Controller
       name={name}
       control={control}
       render={({ field, fieldState }) => (
         <div>
-          <label htmlFor={name} className="text-sm">
-            {label}
+          <label htmlFor={name} className="block text-sm font-semibold">
+            {required ? (
+              <span>
+                {label} <span className="text-red-500">*</span>
+              </span>
+            ) : (
+              label
+            )}
           </label>
           <Input.Password {...field} {...props} placeholder={placeholder} status={fieldState.error && "error"} />
           {fieldState.error && <p className="text-xs text-red-600">{fieldState.error.message}</p>}

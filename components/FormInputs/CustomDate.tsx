@@ -26,7 +26,7 @@ export default function CustomDateInput({
       control={control}
       render={({ field, fieldState }) => (
         <div>
-          <label htmlFor={name} className="block text-sm">
+          <label htmlFor={name} className="block text-sm font-semibold">
             {required ? (
               <span>
                 {label} <span className="text-red-500">*</span>
@@ -41,7 +41,6 @@ export default function CustomDateInput({
             placeholder={placeholder}
             value={field.value ? dayjs(field.value) : null} // Convert Date to Dayjs for the DatePicker
             onChange={(date: Dayjs) => field.onChange(date ? date.toDate() : null)} // Convert Dayjs to Date for React Hook Form
-            format={"DD-MM-YYYY"}
             status={fieldState.error && "error"}
             className="!w-full"
           />

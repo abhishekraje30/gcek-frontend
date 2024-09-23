@@ -8,9 +8,9 @@ import { SubmitHandler, useForm } from "react-hook-form"
 import * as zod from "zod"
 import { register } from "actions/register"
 import AlertNotification from "components/AlertNotification"
-import CustomTextInput from "components/FormInputs/CustomInput"
 import CustomPasswordInput from "components/FormInputs/CustomPasswordInput"
 import CustomRadioSelect from "components/FormInputs/CustomRadioSelect"
+import CustomTextInput from "components/FormInputs/CustomTextInput"
 import { ALUMINI_ROLE, SIGN_IN, STUDENT_ROLE } from "configs/constants"
 import { SignUpSchema } from "configs/schemas"
 
@@ -37,14 +37,7 @@ export default function SignUp() {
       const response = await register(values)
       setStatus(response.status)
       if (response.status === "success") {
-        setMessage(
-          <>
-            <span>Account created successfully. Please </span>
-            <Link href={SIGN_IN} className="text-blue-600 hover:underline">
-              Sign in here
-            </Link>
-          </>
-        )
+        setMessage("Verification email sent. Please check your email to verify your account.")
       } else {
         if (response.message === "ExistingUser") {
           setMessage(

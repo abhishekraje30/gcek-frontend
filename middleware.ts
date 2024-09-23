@@ -1,10 +1,11 @@
 import { NextResponse } from "next/server"
 import { auth } from "auth"
+import { CAREER_CALENDAR_ROUTE, HOME_ROUTE, PROFILE_ROUTE } from "configs/constants"
 
 export default auth((req) => {
   const pathname = req.nextUrl.pathname
   // Define protected routes
-  const protectedRoutes = ["/", "/protected"]
+  const protectedRoutes = [HOME_ROUTE, PROFILE_ROUTE, CAREER_CALENDAR_ROUTE]
 
   // Check if the user is authenticated. If auth is null then the user is not authenticated
   const isAuthenticated = !!req.auth

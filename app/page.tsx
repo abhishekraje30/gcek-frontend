@@ -3,7 +3,7 @@ import { Button, Card, Divider, Progress } from "antd"
 import Link from "next/link"
 import { useState } from "react"
 import HeaderSidebar from "components/HeaderSidebar"
-import { STUDENT_ROLE } from "configs/constants"
+import { PROFILE_ROUTE, STUDENT_ROLE } from "configs/constants"
 import { useCurrentUser, useGetCurrentUserRole } from "hooks/use-current-user"
 import { useGetOrCreateData } from "hooks/useCRUD"
 
@@ -21,10 +21,13 @@ export default function Web() {
   })
   const profileCompleteness = studentProfileData?.profile_completeness
   return (
-    <>
-      <HeaderSidebar />
+    <div className="flex flex-col">
+      <div className="flex-1">
+        <HeaderSidebar />
+      </div>
+
       <main className="mt-2">
-        <div className="mx-auto mt-4 w-3/4 md:w-1/4">
+        <div className="mx-auto mt-4 w-3/4">
           <Card title={<span className="flex justify-center text-lg font-bold">Profile Completion</span>}>
             <div className="grid place-content-center">
               <Progress
@@ -35,7 +38,7 @@ export default function Web() {
             </div>
             <Divider />
             <div className="mx-auto grid place-content-center">
-              <Link href="/profile">
+              <Link href={PROFILE_ROUTE}>
                 <Button type="primary" loading={loading} onClick={() => setLoading(true)}>
                   {profileCompleteness !== 100 ? "Complete Profile" : "View or Update Profile"}
                 </Button>
@@ -44,6 +47,6 @@ export default function Web() {
           </Card>
         </div>
       </main>
-    </>
+    </div>
   )
 }

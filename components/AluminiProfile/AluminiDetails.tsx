@@ -6,9 +6,9 @@ import * as zod from "zod"
 import AlertNotification from "components/AlertNotification"
 import CustomDateInput from "components/FormInputs/CustomDate"
 
-import CustomTextInput from "components/FormInputs/CustomInput"
 import CustomRadioSelect from "components/FormInputs/CustomRadioSelect"
 import CustomSingleSelect from "components/FormInputs/CustomSingleSelect"
+import CustomTextInput from "components/FormInputs/CustomTextInput"
 import { branchURL, genderOptions } from "configs/constants"
 import { AluminiDetailsSchema } from "configs/schemas"
 import { useGetData } from "hooks/useCRUD"
@@ -111,7 +111,14 @@ export default function AluminiDetails({
 
         <div className="flex flex-col gap-2 md:flex-row">
           <div className="flex-1">
-            <CustomDateInput name="birth_date" control={control} label="Date of birth" required allowClear={false} />
+            <CustomDateInput
+              name="birth_date"
+              control={control}
+              label="Date of birth"
+              required
+              allowClear={false}
+              format={"DD-MM-YYYY"}
+            />
           </div>
           <div className="flex-1">
             <CustomRadioSelect name="gender" control={control} label="Gender" options={genderOptions} required />

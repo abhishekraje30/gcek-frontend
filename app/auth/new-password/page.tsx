@@ -2,6 +2,7 @@
 import { useRouter, useSearchParams } from "next/navigation"
 import { useEffect, useState } from "react"
 import { verifyToken } from "actions/verification-token"
+import { UNAUTHORIZED } from "configs/constants"
 import Loader from "../../../components/Loader"
 import NewPassword from "../../../components/NewPassword"
 
@@ -14,7 +15,7 @@ export default function ChangePassword() {
   useEffect(() => {
     const token = searchParams.get("token")
     if (!token) {
-      router.push("/unauthorized")
+      router.push(UNAUTHORIZED)
       return
     }
 
@@ -23,13 +24,12 @@ export default function ChangePassword() {
         const { valid, email } = await verifyToken(token)
 
         if (!valid) {
-          router.push("/unauthorized")
+          router.push(UNAUTHORIZED)
         }
         setValidToken(true)
         setEmail(email)
       } catch (error) {
-        console.error("Error in resetting new password:", error)
-        router.push("/unauthorized")
+        router.push(UNAUTHORIZED)
       }
     })()
   }, [searchParams, router])

@@ -4,7 +4,10 @@ import { Drawer, Menu, MenuProps } from "antd"
 import Image from "next/image"
 import Link from "next/link"
 import { usePathname } from "next/navigation"
+import { useRouter } from "next/navigation"
 import { useState } from "react"
+import { CAREER_CALENDAR_ROUTE, HOME_ROUTE, PROFILE_ROUTE, UNVERIFIED } from "configs/constants"
+import { useIsUserVerified } from "hooks/use-current-user"
 import Loader from "./Loader"
 import { UserButton } from "./UserButton"
 
@@ -14,9 +17,16 @@ export default function HeaderSidebar() {
   const pathname = usePathname()
   const [isSidebarOpen, setIsSidebarOpen] = useState(false)
   const [loading, setLoading] = useState(false)
+  const router = useRouter()
+  const { emailVerified } = useIsUserVerified()
 
   const toggleSidebar = () => {
     setIsSidebarOpen(!isSidebarOpen)
+  }
+
+  if (!emailVerified) {
+    // Redirect to 'notverified' page if email is not verified
+    router.push(UNVERIFIED)
   }
 
   const handleLinkClick = () => {
@@ -27,27 +37,27 @@ export default function HeaderSidebar() {
 
   const items: MenuItem[] = [
     {
-      key: "/",
+      key: HOME_ROUTE,
       label: (
-        <Link href="/" onClick={handleLinkClick}>
+        <Link href={HOME_ROUTE} onClick={handleLinkClick}>
           Home
         </Link>
       ),
       icon: <HomeOutlined />,
     },
     {
-      key: "/profile",
+      key: PROFILE_ROUTE,
       label: (
-        <Link href="/profile" onClick={handleLinkClick}>
+        <Link href={PROFILE_ROUTE} onClick={handleLinkClick}>
           Profile
         </Link>
       ),
       icon: <ProfileOutlined />,
     },
     {
-      key: "/career-calendar",
+      key: CAREER_CALENDAR_ROUTE,
       label: (
-        <Link href="/career-calendar" onClick={handleLinkClick}>
+        <Link href={CAREER_CALENDAR_ROUTE} onClick={handleLinkClick}>
           Career Calendar
         </Link>
       ),
@@ -60,7 +70,7 @@ export default function HeaderSidebar() {
   }
 
   return (
-    <div>
+    <div className="flex-1">
       <header className="sticky left-0 top-0 flex items-center justify-between border-b border-gray-300 p-2 shadow-md">
         <div className="flex items-center gap-2">
           <div

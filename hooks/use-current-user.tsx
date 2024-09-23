@@ -1,3 +1,4 @@
+"use client"
 import { useSession } from "next-auth/react"
 
 export const useCurrentUser = () => {
@@ -10,4 +11,9 @@ export const useGetCurrentUserRole = () => {
   const session = useSession()
   const roles = session.data?.userInfo?.roles
   return roles.map((role: any) => role.role)
+}
+
+export const useIsUserVerified = () => {
+  const { data, status } = useSession()
+  return { emailVerified: data?.userInfo?.email_verified, status }
 }

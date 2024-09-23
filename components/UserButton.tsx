@@ -4,14 +4,14 @@ import { LogoutOutlined, UserOutlined } from "@ant-design/icons"
 import { Avatar, Dropdown, MenuProps, Space } from "antd"
 import Link from "next/link"
 import { signOut, useSession } from "next-auth/react"
-import { RESET_PASSWORD, SIGN_IN } from "configs/constants"
+import { PROFILE_ROUTE, RESET_PASSWORD, SIGN_IN } from "configs/constants"
 
 export const UserButton = () => {
   const session = useSession()
   const items: MenuProps["items"] = [
     {
       key: "1",
-      label: <Link href="/profile">Profile</Link>,
+      label: <Link href={PROFILE_ROUTE}>Profile</Link>,
     },
     {
       key: "2",
