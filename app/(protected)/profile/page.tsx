@@ -15,7 +15,7 @@ import { useCurrentUser, useGetCurrentUserRole } from "hooks/use-current-user"
 import { useGetData, useGetOrCreateData, useUpdateData } from "hooks/useCRUD"
 
 export default function Profile() {
-  const [current, setCurrent] = useState(0)
+  const [current, setCurrent] = useState(6)
 
   const user = useCurrentUser()
   const userRoles = useGetCurrentUserRole()
