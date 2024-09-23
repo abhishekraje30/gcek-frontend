@@ -1,8 +1,7 @@
 "use client"
 
-import { first } from "lodash"
+import Image from "next/image"
 import { useState } from "react"
-import { join } from "path"
 
 export default function Resume() {
   const [imageSrc, setImageSrc] = useState("https://media-public.canva.com/0EEWY/MAEHl10EEWY/1/tl.jpg")
@@ -36,7 +35,7 @@ export default function Resume() {
       <div className="flex h-1/5 w-full">
         <div className="grid w-[30%] place-content-center bg-[#163852] px-4">
           <div className="grid size-[150px] place-content-center overflow-hidden rounded-full border-2 border-gray-300">
-            <img src={imageSrc} alt="Cropped" className="size-full object-cover" />
+            <Image src={imageSrc} alt="Cropped" width={150} height={150} objectFit="cover" />
           </div>
         </div>
         <div className="flex w-[70%] flex-col justify-center pl-8">

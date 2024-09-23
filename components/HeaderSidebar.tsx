@@ -18,13 +18,13 @@ export default function HeaderSidebar() {
   const [isSidebarOpen, setIsSidebarOpen] = useState(false)
   const [loading, setLoading] = useState(false)
   const router = useRouter()
-  const IsUserVerified = useIsUserVerified()
+  const { emailVerified } = useIsUserVerified()
 
   const toggleSidebar = () => {
     setIsSidebarOpen(!isSidebarOpen)
   }
 
-  if (!IsUserVerified) {
+  if (!emailVerified) {
     // Redirect to 'notverified' page if email is not verified
     router.push(UNVERIFIED)
   }

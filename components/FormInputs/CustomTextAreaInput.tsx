@@ -2,14 +2,14 @@
 import { Input, InputProps } from "antd"
 import { Control, Controller } from "react-hook-form"
 
-interface InputFieldProps extends InputProps {
-  control: Control<any>
-  name: string
-  label: string
-  size?: "small" | "large"
-  placeholder?: string
-  required?: boolean
-}
+// interface InputFieldProps extends InputProps {
+//   control: Control<any>
+//   name: string
+//   label: string
+//   size?: "small" | "large"
+//   placeholder?: string
+//   required?: boolean
+// }
 
 export default function CustomTextAreaInput({
   control,

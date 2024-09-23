@@ -1,13 +1,12 @@
 import { zodResolver } from "@hookform/resolvers/zod"
 import { Button } from "antd"
-import { useState } from "react"
+import { useEffect, useState } from "react"
 import { SubmitHandler, useForm } from "react-hook-form"
 import * as zod from "zod"
-import CustomDateRangeInput from "components/FormInputs/CustomDateRangePicker"
+import AlertNotification from "components/AlertNotification"
+import CustomDateInput from "components/FormInputs/CustomDate"
 import CustomTextAreaInput from "components/FormInputs/CustomTextAreaInput"
 import CustomTextInput from "components/FormInputs/CustomTextInput"
-import CustomDateInput from "components/FormInputs/CustomDate"
-import AlertNotification from "components/AlertNotification"
 
 const InternshipTrainingDetailsSchema = zod.object({
   company_name: zod.string({ required_error: "Company name is required" }),
@@ -21,8 +20,12 @@ const InternshipTrainingDetailsSchema = zod.object({
 const getDefaultValues = (userInfo: any): any => {
   return {
     company_name: userInfo?.company_name,
-    internship_joining_date: userInfo?.internship_joining_date,
-    internship_completion_date: userInfo?.internship_completion_date,
+    internship_joining_date: userInfo?.internship_joining_date
+      ? new Date(userInfo.internship_joining_date)
+      : new Date(),
+    internship_completion_date: userInfo?.internship_completion_date
+      ? new Date(userInfo.internship_completion_date)
+      : new Date(),
     responsibility_1: userInfo?.responsibility_1,
     responsibility_2: userInfo?.responsibility_2,
     responsibility_3: userInfo?.responsibility_3,
@@ -43,16 +46,20 @@ export default function InternshipTrainingDetails({
   const [loading, setLoading] = useState(false)
   const [message, setMessage] = useState("")
   const [status, setStatus] = useState("")
-  const { control, handleSubmit, reset, watch, formState } = useForm({
+  const { control, handleSubmit, reset, formState } = useForm({
     resolver: zodResolver(InternshipTrainingDetailsSchema),
     defaultValues: getDefaultValues(profileData),
     mode: "onBlur",
   })
 
+  useEffect(() => {
+    reset(getDefaultValues(profileData))
+  }, [profileData, reset])
+
   const onSubmit: SubmitHandler<zod.infer<typeof InternshipTrainingDetailsSchema>> = async (data) => {
     setLoading(true)
     const formattedData = {
-      profile_completeness: 100,
+      profile_completeness: 80,
       ...data,
     }
     try {
@@ -142,12 +149,14 @@ export default function InternshipTrainingDetails({
           <Button type="primary" htmlType="button" onClick={() => setTab(currentTab - 1)}>
             Prev
           </Button>
-          <Button type="primary" htmlType="submit" loading={loading}>
+          <Button type="primary" htmlType="submit" loading={loading} disabled={!formState.isValid}>
             Save
           </Button>
-          <Button type="primary" htmlType="button" onClick={() => setTab(currentTab + 1)}>
-            Next
-          </Button>
+          {Object.keys(formState.errors).length === 0 && formState.isValid && (
+            <Button type="primary" htmlType="button" onClick={() => setTab(currentTab + 1)}>
+              Next
+            </Button>
+          )}
         </div>
       </form>
     </div>

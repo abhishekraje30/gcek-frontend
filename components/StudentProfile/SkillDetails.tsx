@@ -1,11 +1,11 @@
 "use client"
 import { zodResolver } from "@hookform/resolvers/zod"
 import { Button } from "antd"
-import { useState } from "react"
+import { useEffect, useState } from "react"
 import { SubmitHandler, useForm } from "react-hook-form"
 import * as zod from "zod"
-import CustomTextInput from "components/FormInputs/CustomTextInput"
 import AlertNotification from "components/AlertNotification"
+import CustomTextInput from "components/FormInputs/CustomTextInput"
 
 const SkillDetailsSchema = zod.object({
   tech_skill_1: zod.string({ required_error: "Technical Skill 1 is required" }),
@@ -45,17 +45,21 @@ export default function SkillDetails({
   const [loading, setLoading] = useState(false)
   const [message, setMessage] = useState("")
   const [status, setStatus] = useState("")
-  const { control, handleSubmit, reset, watch, formState } = useForm({
+  const { control, handleSubmit, reset, formState } = useForm({
     resolver: zodResolver(SkillDetailsSchema),
     defaultValues: getDefaultValues(profileData),
     mode: "onBlur",
   })
 
+  useEffect(() => {
+    reset(getDefaultValues(profileData))
+  }, [profileData, reset])
+
   const onSubmit: SubmitHandler<zod.infer<typeof SkillDetailsSchema>> = async (data) => {
     setLoading(true)
     const formattedData = {
-      profile_completeness: 100,
       ...data,
+      profile_completeness: 45,
     }
     try {
       await updateStudentProfile(formattedData)
@@ -114,12 +118,14 @@ export default function SkillDetails({
             <Button type="primary" htmlType="button" onClick={() => setTab(currentTab - 1)}>
               Prev
             </Button>
-            <Button type="primary" htmlType="submit" loading={loading}>
+            <Button type="primary" htmlType="submit" loading={loading} disabled={!formState.isValid}>
               Save
             </Button>
-            <Button type="primary" htmlType="button" onClick={() => setTab(currentTab + 1)}>
-              Next
-            </Button>
+            {Object.keys(formState.errors).length === 0 && formState.isValid && (
+              <Button type="primary" htmlType="button" onClick={() => setTab(currentTab + 1)}>
+                Next
+              </Button>
+            )}
           </div>
         </div>
       </form>

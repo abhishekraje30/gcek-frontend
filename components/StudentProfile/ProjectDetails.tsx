@@ -1,7 +1,7 @@
 "use client"
 import { zodResolver } from "@hookform/resolvers/zod"
 import { Button } from "antd"
-import { useState } from "react"
+import { useEffect, useState } from "react"
 import { SubmitHandler } from "react-hook-form"
 import { useForm } from "react-hook-form"
 import * as zod from "zod"
@@ -48,16 +48,20 @@ export default function ProjectDetails({
   const [loading, setLoading] = useState(false)
   const [message, setMessage] = useState("")
   const [status, setStatus] = useState("")
-  const { control, handleSubmit, reset, watch, formState } = useForm({
+  const { control, handleSubmit, reset, formState } = useForm({
     resolver: zodResolver(ProjectDetailsSchema),
     defaultValues: getDefaultValues(profileData),
     mode: "onBlur",
   })
 
+  useEffect(() => {
+    reset(getDefaultValues(profileData))
+  }, [profileData, reset])
+
   const onSubmit: SubmitHandler<zod.infer<typeof ProjectDetailsSchema>> = async (data) => {
     setLoading(true)
     const formattedData = {
-      profile_completeness: 100,
+      profile_completeness: 70,
       ...data,
     }
     try {
@@ -148,12 +152,14 @@ export default function ProjectDetails({
           <Button type="primary" htmlType="button" onClick={() => setTab(currentTab - 1)}>
             Prev
           </Button>
-          <Button type="primary" htmlType="submit" loading={loading}>
+          <Button type="primary" htmlType="submit" loading={loading} disabled={!formState.isValid}>
             Save
           </Button>
-          <Button type="primary" htmlType="button" onClick={() => setTab(currentTab + 1)}>
-            Next
-          </Button>
+          {Object.keys(formState.errors).length === 0 && formState.isValid && (
+            <Button type="primary" htmlType="button" onClick={() => setTab(currentTab + 1)}>
+              Next
+            </Button>
+          )}
         </div>
       </form>
     </div>

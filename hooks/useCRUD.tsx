@@ -11,7 +11,7 @@ export const useGetData = (url: string) => {
 // Custom hook to get or create data
 export const useGetOrCreateData = (baseURL: string, id: string, createObject: any) => {
   const url = `${baseURL}/${id}`
-  const { data, error, isLoading } = useSWR(url, () => getOrCreateData(baseURL, id, createObject))
+  const { data, error, isLoading } = useSWR(url, async () => await getOrCreateData(baseURL, id, createObject))
 
   return { data, error, isLoading }
 }

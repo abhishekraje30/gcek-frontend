@@ -1,11 +1,10 @@
 import { zodResolver } from "@hookform/resolvers/zod"
 import { Button } from "antd"
-import { useState } from "react"
+import { useEffect, useState } from "react"
 import { SubmitHandler, useForm } from "react-hook-form"
 import * as zod from "zod"
-import CustomTextAreaInput from "components/FormInputs/CustomTextAreaInput"
-import CustomTextInput from "components/FormInputs/CustomTextInput"
 import AlertNotification from "components/AlertNotification"
+import CustomTextAreaInput from "components/FormInputs/CustomTextAreaInput"
 
 export const ProfessionalSummarySchema = zod.object({
   professional_summary: zod
@@ -33,17 +32,21 @@ export default function ProfessionalSummary({
   const [loading, setLoading] = useState(false)
   const [message, setMessage] = useState("")
   const [status, setStatus] = useState("")
-  const { control, handleSubmit, reset, watch, formState } = useForm({
+  const { control, handleSubmit, reset, formState } = useForm({
     resolver: zodResolver(ProfessionalSummarySchema),
     defaultValues: getDefaultValues(profileData),
     mode: "onBlur",
   })
 
+  useEffect(() => {
+    reset(getDefaultValues(profileData))
+  }, [profileData, reset])
+
   const onSubmit: SubmitHandler<zod.infer<typeof ProfessionalSummarySchema>> = async (data) => {
     setLoading(true)
     const formattedData = {
-      profile_completeness: 40,
       ...data,
+      profile_completeness: 35,
     }
     try {
       await updateStudentProfile(formattedData)
@@ -78,12 +81,14 @@ export default function ProfessionalSummary({
             <Button type="primary" htmlType="button" onClick={() => setTab(currentTab - 1)}>
               Prev
             </Button>
-            <Button type="primary" htmlType="submit" loading={loading}>
+            <Button type="primary" htmlType="submit" loading={loading} disabled={!formState.isValid}>
               Save
             </Button>
-            <Button type="primary" htmlType="button" onClick={() => setTab(currentTab + 1)}>
-              Next
-            </Button>
+            {Object.keys(formState.errors).length === 0 && formState.isValid && (
+              <Button type="primary" htmlType="button" onClick={() => setTab(currentTab + 1)}>
+                Next
+              </Button>
+            )}
           </div>
         </div>
       </form>

@@ -3,6 +3,7 @@
 import { Steps, StepsProps } from "antd"
 import { useState } from "react"
 import AluminiDetails from "components/AluminiProfile/AluminiDetails"
+import Loader from "components/Loader"
 import AcademicDetails from "components/StudentProfile/AcademicDetails"
 import InternshipTrainingDetails from "components/StudentProfile/InternshipTrainingDetails"
 import PersonalDetails from "components/StudentProfile/PersonalDetails"
@@ -15,7 +16,7 @@ import { useCurrentUser, useGetCurrentUserRole } from "hooks/use-current-user"
 import { useGetData, useGetOrCreateData, useUpdateData } from "hooks/useCRUD"
 
 export default function Profile() {
-  const [current, setCurrent] = useState(6)
+  const [current, setCurrent] = useState(0)
 
   const user = useCurrentUser()
   const userRoles = useGetCurrentUserRole()
@@ -32,6 +33,7 @@ export default function Profile() {
   const { update: updateUserMetadata } = useUpdateData(userMetadataUrl)
   const { update: updateStudentProfile } = useUpdateData(`${profileUrl}/${user?.email}`)
   const { update: updateAluminiProfile } = useUpdateData(`${profileUrl}/${user?.email}`)
+
   const items: StepsProps["items"] = [
     {
       title: "Personal Details",
@@ -137,6 +139,8 @@ export default function Profile() {
       ),
     },
   ]
+
+  if (!userProfileData) return <Loader />
 
   return (
     <main className="grid place-content-center p-8">

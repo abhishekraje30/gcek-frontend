@@ -2,6 +2,7 @@
 
 import { zodResolver } from "@hookform/resolvers/zod"
 import { Button } from "antd"
+import { useEffect, useState } from "react"
 import { SubmitHandler, useForm } from "react-hook-form"
 import * as zod from "zod"
 import AlertNotification from "components/AlertNotification"
@@ -13,29 +14,28 @@ import CustomTextInput from "components/FormInputs/CustomTextInput"
 import { markingSystemOptions } from "configs/constants"
 import { StudentAcademicDetailsSchema } from "configs/schemas"
 import { useGetData } from "hooks/useCRUD"
-import { useState } from "react"
 
 const getDefaultValues = (userInfo: any) => {
   return {
     degree_branch: userInfo?.degree_branch,
-    degree_joining_year: userInfo?.degree_joining_year,
-    degree_passing_year: userInfo?.degree_passing_year,
+    degree_joining_year: userInfo?.degree_joining_year ? new Date(userInfo.degree_joining_year) : new Date(),
+    degree_passing_year: userInfo?.degree_passing_year ? new Date(userInfo.degree_passing_year) : new Date(),
     degree_marking_system: userInfo?.degree_marking_system ?? "Percentage",
     degree_percentage: userInfo?.degree_percentage,
     degree_cgpa: userInfo?.degree_cgpa,
     hsc_or_diploma: userInfo?.hsc_or_diploma ?? "HSC",
     hsc_board_name: userInfo?.hsc_board_name,
-    hsc_passing_year: userInfo?.hsc_passing_year,
+    hsc_passing_year: userInfo?.hsc_passing_year ? new Date(userInfo.hsc_passing_year) : new Date(),
     hsc_marking_system: userInfo?.hsc_marking_system ?? "Percentage",
     hsc_percentage: userInfo?.hsc_percentage,
     hsc_cgpa: userInfo?.hsc_cgpa,
-    diploma_passing_year: userInfo?.diploma_passing_year,
+    diploma_passing_year: userInfo?.diploma_passing_year ? new Date(userInfo.diploma_passing_year) : new Date(),
     diploma_branch: userInfo?.diploma_branch,
     diploma_marking_system: userInfo?.diploma_marking_system ?? "Percentage",
     diploma_percentage: userInfo?.diploma_percentage,
     diploma_cgpa: userInfo?.diploma_cgpa,
     ssc_board_name: userInfo?.ssc_board_name,
-    ssc_passing_year: userInfo?.ssc_passing_year,
+    ssc_passing_year: userInfo?.ssc_passing_year ? new Date(userInfo.ssc_passing_year) : new Date(),
     ssc_marking_system: userInfo?.ssc_marking_system ?? "Percentage",
     ssc_percentage: userInfo?.ssc_percentage,
     ssc_cgpa: userInfo?.ssc_cgpa,
@@ -63,18 +63,22 @@ export default function AcademicDetails({
     label: branch.branch_name,
   }))
 
-  const { control, handleSubmit, reset, watch } = useForm({
+  const { control, handleSubmit, reset, watch, formState } = useForm({
     resolver: zodResolver(StudentAcademicDetailsSchema),
     defaultValues: getDefaultValues(profileData),
     mode: "onBlur",
   })
 
+  useEffect(() => {
+    reset(getDefaultValues(profileData))
+  }, [profileData, reset])
+
   const onSubmit: SubmitHandler<zod.infer<typeof StudentAcademicDetailsSchema>> = async (data) => {
     setLoading(true)
     console.log(data)
     const formattedData = {
-      profile_completeness: 25,
       ...data,
+      profile_completeness: 25,
     }
     try {
       await updateStudentProfile(formattedData)
@@ -353,12 +357,14 @@ export default function AcademicDetails({
           <Button type="primary" htmlType="button" onClick={() => setTab(currentTab - 1)}>
             Prev
           </Button>
-          <Button type="primary" htmlType="submit" loading={loading}>
+          <Button type="primary" htmlType="submit" loading={loading} disabled={!formState.isValid}>
             Save
           </Button>
-          <Button type="primary" htmlType="button" onClick={() => setTab(currentTab + 1)}>
-            Next
-          </Button>
+          {Object.keys(formState.errors).length === 0 && formState.isValid && (
+            <Button type="primary" htmlType="button" onClick={() => setTab(currentTab + 1)}>
+              Next
+            </Button>
+          )}
         </div>
       </form>
     </div>
