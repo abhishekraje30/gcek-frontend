@@ -6,26 +6,26 @@ import * as zod from "zod"
 import CustomDateRangeInput from "components/FormInputs/CustomDateRangePicker"
 import CustomTextAreaInput from "components/FormInputs/CustomTextAreaInput"
 import CustomTextInput from "components/FormInputs/CustomTextInput"
+import CustomDateInput from "components/FormInputs/CustomDate"
+import AlertNotification from "components/AlertNotification"
 
 const InternshipTrainingDetailsSchema = zod.object({
-  projectTitle: zod
-    .string({ required_error: "Company Name is required" })
-    .min(3, "Company Name should be at least 3 characters long")
-    .max(100, "Company Name should be at most 100 characters long"),
-  responsibilities: zod.string({ required_error: "Responsibilities is required" }),
-  project_description_1: zod.string({ required_error: "Project description is required" }),
-  project_description_2: zod.string({ required_error: "Project description is required" }),
-  project_description_3: zod.string(),
+  company_name: zod.string({ required_error: "Company name is required" }),
+  internship_joining_date: zod.date({ required_error: "Internship joining date is required" }),
+  internship_completion_date: zod.date({ required_error: "Internship completion date is required" }),
+  responsibility_1: zod.string({ required_error: "Responsibility 1 is required" }),
+  responsibility_2: zod.string({ required_error: "Responsibility 2 is required" }),
+  responsibility_3: zod.string().optional(),
 })
 
 const getDefaultValues = (userInfo: any): any => {
   return {
-    projectTitle: userInfo?.projectTitle || "",
-    duration: userInfo?.duration || "",
-    responsibilities: userInfo?.responsibilities || "",
-    project_description_1: userInfo?.project_description_1 || "",
-    project_description_2: userInfo?.project_description_2 || "",
-    project_description_3: userInfo?.project_description_3 || "",
+    company_name: userInfo?.company_name,
+    internship_joining_date: userInfo?.internship_joining_date,
+    internship_completion_date: userInfo?.internship_completion_date,
+    responsibility_1: userInfo?.responsibility_1,
+    responsibility_2: userInfo?.responsibility_2,
+    responsibility_3: userInfo?.responsibility_3,
   }
 }
 
@@ -72,10 +72,31 @@ export default function InternshipTrainingDetails({
       <form onSubmit={handleSubmit(onSubmit)} className="flex w-full flex-col gap-6">
         <div className="flex flex-col gap-2">
           <div className="flex-2">
-            <CustomTextInput control={control} name="projectTitle" label="Company Name" />
+            <CustomTextInput control={control} name="company_name" label="Company Name" required />
           </div>
-          <div className="w-1/2">
-            <CustomDateRangeInput control={control} name="duration" label="Duration" picker="month" />
+          <div className="flex w-1/2 gap-2">
+            <div className="flex-1">
+              <CustomDateInput
+                control={control}
+                name="internship_joining_date"
+                picker="month"
+                label="Internship Joining Date"
+                placeholder="Internship Joining Year"
+                format={"MM-YYYY"}
+                required
+              />
+            </div>
+            <div className="flex-1">
+              <CustomDateInput
+                control={control}
+                name="internship_completion_date"
+                picker="month"
+                label="Internship Completion Date"
+                placeholder="Internship Completion Date"
+                format={"MM-YYYY"}
+                required
+              />
+            </div>
           </div>
           <div>
             <CustomTextAreaInput
@@ -87,6 +108,7 @@ export default function InternshipTrainingDetails({
               rows={2}
               type="text-area"
               className="!w-full"
+              required
             />
           </div>
           <div>
@@ -99,6 +121,7 @@ export default function InternshipTrainingDetails({
               rows={2}
               type="text-area"
               className="!w-full"
+              required
             />
           </div>
           <div>
@@ -114,6 +137,7 @@ export default function InternshipTrainingDetails({
             />
           </div>
         </div>
+        <AlertNotification message={message} status={status} />
         <div className="flex flex-1 justify-end gap-2">
           <Button type="primary" htmlType="button" onClick={() => setTab(currentTab - 1)}>
             Prev

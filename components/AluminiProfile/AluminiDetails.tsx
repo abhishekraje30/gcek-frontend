@@ -111,7 +111,14 @@ export default function AluminiDetails({
 
         <div className="flex flex-col gap-2 md:flex-row">
           <div className="flex-1">
-            <CustomDateInput name="birth_date" control={control} label="Date of birth" required allowClear={false} />
+            <CustomDateInput
+              name="birth_date"
+              control={control}
+              label="Date of birth"
+              required
+              allowClear={false}
+              format={"DD-MM-YYYY"}
+            />
           </div>
           <div className="flex-1">
             <CustomRadioSelect name="gender" control={control} label="Gender" options={genderOptions} required />

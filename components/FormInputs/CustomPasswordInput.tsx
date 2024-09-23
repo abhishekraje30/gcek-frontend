@@ -16,7 +16,7 @@ export default function CustomPasswordInput({ control, name, label, placeholder,
       control={control}
       render={({ field, fieldState }) => (
         <div>
-          <label htmlFor={name} className="block text-sm">
+          <label htmlFor={name} className="block text-sm font-semibold">
             {required ? (
               <span>
                 {label} <span className="text-red-500">*</span>

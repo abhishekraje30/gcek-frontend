@@ -19,7 +19,7 @@ export default function CustomSwitch({ control, name, label, required, onChange,
       control={control}
       render={({ field, fieldState }) => (
         <div className="flex flex-col gap-1">
-          <label htmlFor={name} className="block text-sm">
+          <label htmlFor={name} className="block text-sm  font-semibold">
             {required ? (
               <span>
                 {label} <span className="text-red-500">*</span>

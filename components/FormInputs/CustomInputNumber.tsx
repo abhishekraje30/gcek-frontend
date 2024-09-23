@@ -24,7 +24,7 @@ export default function CustomInputNumber({
       control={control}
       render={({ field, fieldState }) => (
         <div>
-          <label htmlFor={name} className="text-sm">
+          <label htmlFor={name} className="text-sm font-semibold">
             {required ? (
               <span>
                 {label} <span className="text-red-500">*</span>

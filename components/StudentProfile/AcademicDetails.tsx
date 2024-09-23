@@ -2,25 +2,24 @@
 
 import { zodResolver } from "@hookform/resolvers/zod"
 import { Button } from "antd"
-import { useEffect, useState } from "react"
 import { SubmitHandler, useForm } from "react-hook-form"
 import * as zod from "zod"
 import AlertNotification from "components/AlertNotification"
+import CustomDateInput from "components/FormInputs/CustomDate"
 import CustomInputNumber from "components/FormInputs/CustomInputNumber"
 import CustomRadioSelect from "components/FormInputs/CustomRadioSelect"
 import CustomSingleSelect from "components/FormInputs/CustomSingleSelect"
 import CustomTextInput from "components/FormInputs/CustomTextInput"
+import { markingSystemOptions } from "configs/constants"
 import { StudentAcademicDetailsSchema } from "configs/schemas"
 import { useGetData } from "hooks/useCRUD"
-import { getYearList } from "utils/helper"
-import CustomDateRangeInput from "components/FormInputs/CustomDateRangePicker"
-import { markingSystemOptions } from "configs/constants"
-import CustomDateInput from "components/FormInputs/CustomDate"
+import { useState } from "react"
 
 const getDefaultValues = (userInfo: any) => {
   return {
     degree_branch: userInfo?.degree_branch,
-    degree_duration: userInfo?.degree_duration,
+    degree_joining_year: userInfo?.degree_joining_year,
+    degree_passing_year: userInfo?.degree_passing_year,
     degree_marking_system: userInfo?.degree_marking_system ?? "Percentage",
     degree_percentage: userInfo?.degree_percentage,
     degree_cgpa: userInfo?.degree_cgpa,
@@ -35,6 +34,11 @@ const getDefaultValues = (userInfo: any) => {
     diploma_marking_system: userInfo?.diploma_marking_system ?? "Percentage",
     diploma_percentage: userInfo?.diploma_percentage,
     diploma_cgpa: userInfo?.diploma_cgpa,
+    ssc_board_name: userInfo?.ssc_board_name,
+    ssc_passing_year: userInfo?.ssc_passing_year,
+    ssc_marking_system: userInfo?.ssc_marking_system ?? "Percentage",
+    ssc_percentage: userInfo?.ssc_percentage,
+    ssc_cgpa: userInfo?.ssc_cgpa,
   }
 }
 
@@ -68,20 +72,20 @@ export default function AcademicDetails({
   const onSubmit: SubmitHandler<zod.infer<typeof StudentAcademicDetailsSchema>> = async (data) => {
     setLoading(true)
     console.log(data)
-    // const formattedData = {
-    //   profile_completeness: 25,
-    //   ...data,
-    // }
-    // try {
-    //   await updateStudentProfile(formattedData)
-    //   setMessage("Profile updated successfully")
-    //   setStatus("success")
-    // } catch (error) {
-    //   console.error("Error updating profile:", error)
-    //   setLoading(false)
-    //   setMessage("Error updating profile")
-    //   setStatus("error")
-    // }
+    const formattedData = {
+      profile_completeness: 25,
+      ...data,
+    }
+    try {
+      await updateStudentProfile(formattedData)
+      setMessage("Profile updated successfully")
+      setStatus("success")
+    } catch (error) {
+      console.error("Error updating profile:", error)
+      setLoading(false)
+      setMessage("Error updating profile")
+      setStatus("error")
+    }
     setLoading(false)
   }
 
@@ -97,21 +101,31 @@ export default function AcademicDetails({
                 name="degree_branch" // Done
                 control={control}
                 label="Branch"
-                required
                 placeholder="Select Your Degree Branch"
                 options={branchOptions}
               />
             </div>
-            <div className="">
-              <CustomDateRangeInput
-                control={control}
-                name="degree_duration" // Done
-                required
-                label="Degree Duration"
-                picker="year"
-                placeholder={["Degree Start Year", "Degree End Year"]}
-                format={"YYYY"}
-              />
+            <div className="flex gap-2">
+              <div className="flex-1">
+                <CustomDateInput
+                  control={control}
+                  name="degree_joining_year"
+                  picker="year"
+                  label="Degree Joining Year"
+                  placeholder="Degree Joining Year"
+                  format={"YYYY"}
+                />
+              </div>
+              <div className="flex-1">
+                <CustomDateInput
+                  control={control}
+                  name="degree_passing_year"
+                  picker="year"
+                  label="Degree Passing Year"
+                  placeholder="Degree Passing Year"
+                  format={"YYYY"}
+                />
+              </div>
             </div>
             <div className="flex flex-col gap-2">
               <div>
@@ -132,7 +146,6 @@ export default function AcademicDetails({
                     name="degree_percentage" // Done
                     label="Percentage"
                     placeholder="Enter Your Degree Percentage"
-                    required
                   />
                 ) : (
                   <CustomInputNumber
@@ -142,7 +155,6 @@ export default function AcademicDetails({
                     name="degree_cgpa" // Done
                     label="CGPA"
                     placeholder="Enter Your Degree Average CGPA"
-                    required
                   />
                 )}
               </div>
@@ -176,7 +188,6 @@ export default function AcademicDetails({
                     control={control}
                     maxLength={100}
                     placeholder="State Board of Maharashtra"
-                    required
                   />
                 </div>
 
@@ -188,7 +199,6 @@ export default function AcademicDetails({
                     label="Passing Year"
                     placeholder="Select Passing Year"
                     format={"YYYY"}
-                    required
                   />
                 </div>
                 <div className="flex flex-col gap-2">
@@ -210,7 +220,6 @@ export default function AcademicDetails({
                         name="hsc_percentage" // Done
                         label="Percentage"
                         placeholder="Enter Your HSC Percentage"
-                        required
                       />
                     ) : (
                       <CustomInputNumber
@@ -220,7 +229,6 @@ export default function AcademicDetails({
                         name="hsc_cgpa" // Done
                         label="CGPA"
                         placeholder="Enter Your HSC CGPA"
-                        required
                       />
                     )}
                   </div>
@@ -238,7 +246,6 @@ export default function AcademicDetails({
                       label="Diploma Passing Year"
                       placeholder="Select Diploma Passing Year"
                       format={"YYYY"}
-                      required
                     />
                   </div>
                   <div>
@@ -247,7 +254,6 @@ export default function AcademicDetails({
                       label="Branch"
                       control={control}
                       maxLength={100}
-                      required
                       placeholder="Enter Your Diploma Branch"
                     />
                   </div>
@@ -269,7 +275,6 @@ export default function AcademicDetails({
                         name="diploma_percentage" // Done
                         label="Percentage"
                         placeholder="Enter Your Average Diploma Percentage"
-                        required
                       />
                     ) : (
                       <CustomInputNumber
@@ -279,7 +284,6 @@ export default function AcademicDetails({
                         name="diploma_cgpa" // Done
                         label="CGPA"
                         placeholder="Enter Your Diploma Average CGPA"
-                        required
                       />
                     )}
                   </div>
@@ -292,7 +296,7 @@ export default function AcademicDetails({
             <h2 className="my-1 font-bold tracking-wide text-gray-700">S.S.C Details</h2>
             <div>
               <CustomTextInput
-                name="ssc_board"
+                name="ssc_board_name" // Done
                 label="Board Name"
                 control={control}
                 maxLength={100}
@@ -300,45 +304,44 @@ export default function AcademicDetails({
               />
             </div>
             <div className="">
-              <CustomSingleSelect
-                name="ssc_passing_year"
+              <CustomDateInput
+                name="ssc_passing_year" // Done
                 control={control}
+                picker="year"
                 label="Passing Year"
-                placeholder="Select Passing Year"
-                required
-                options={getYearList()}
+                placeholder="Select SSC Passing Year"
+                format={"YYYY"}
               />
             </div>
-            <div>
+            <div className="flex flex-col gap-2">
               <div>
                 <CustomRadioSelect
-                  name="ssc_percentage_or_cgpa"
+                  name="ssc_marking_system"
                   control={control}
                   label="Marking System"
-                  options={[
-                    {
-                      label: "Percentage",
-                      value: "Percentage",
-                    },
-                    {
-                      label: "CGPA",
-                      value: "CGPA",
-                    },
-                  ]}
+                  options={markingSystemOptions}
                 />
               </div>
               <div>
-                {watch("ssc_percentage_or_cgpa") === "Percentage" ? (
+                {watch("ssc_marking_system") === "Percentage" ? (
                   <CustomInputNumber
                     min={0}
                     max={100}
                     addonAfter={"%"}
                     control={control}
-                    name="percentage"
+                    name="ssc_percentage" // Done
                     label="Percentage"
+                    placeholder="Enter Your SSC Percentage"
                   />
                 ) : (
-                  <CustomInputNumber min={0} max={10} control={control} name="cgpa" label="CGPA" />
+                  <CustomInputNumber
+                    min={0}
+                    max={10}
+                    control={control}
+                    name="ssc_cgpa" // Done
+                    label="CGPA"
+                    placeholder="Enter Your SSC CGPA"
+                  />
                 )}
               </div>
             </div>

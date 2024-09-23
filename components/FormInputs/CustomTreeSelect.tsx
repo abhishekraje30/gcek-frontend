@@ -29,7 +29,7 @@ export default function CustomTreeSelect({
       control={control}
       render={({ field, fieldState }) => (
         <div>
-          <label htmlFor={name} className="text-sm">
+          <label htmlFor={name} className="text-sm font-semibold">
             {label}
           </label>
           <TreeSelect

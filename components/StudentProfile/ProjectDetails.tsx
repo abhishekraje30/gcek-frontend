@@ -5,6 +5,7 @@ import { useState } from "react"
 import { SubmitHandler } from "react-hook-form"
 import { useForm } from "react-hook-form"
 import * as zod from "zod"
+import AlertNotification from "components/AlertNotification"
 import CustomTextAreaInput from "components/FormInputs/CustomTextAreaInput"
 import CustomTextInput from "components/FormInputs/CustomTextInput"
 
@@ -19,14 +20,17 @@ const ProjectDetailsSchema = zod.object({
     .max(100, "Project summary should be at most 100 characters long"),
   project_description_1: zod.string({ required_error: "Project description is required" }),
   project_description_2: zod.string({ required_error: "Project description is required" }),
-  project_description_3: zod.string(),
+  project_description_3: zod.string().optional(),
+  project_description_4: zod.string().optional(),
 })
 
 const getDefaultValues = (userInfo: any): any => {
   return {
-    projectTitle: userInfo?.projectTitle || "",
-    projectDescription: userInfo?.projectDescription || "",
-    projectLink: userInfo?.projectLink || "",
+    project_title: userInfo?.project_title,
+    project_summary: userInfo?.project_summary,
+    project_description_1: userInfo?.project_description_1,
+    project_description_2: userInfo?.project_description_2,
+    project_description_3: userInfo?.project_description_3,
   }
 }
 
@@ -73,7 +77,7 @@ export default function ProjectDetails({
       <form onSubmit={handleSubmit(onSubmit)} className="flex w-full flex-col gap-6">
         <div className="flex flex-col gap-2">
           <div>
-            <CustomTextInput control={control} name="projectTitle" label="Project Title" />
+            <CustomTextInput control={control} name="project_title" label="Project Title" required />
           </div>
           <div className="w-full flex-1">
             <CustomTextAreaInput
@@ -85,6 +89,7 @@ export default function ProjectDetails({
               rows={5}
               type="text-area"
               className="!w-full"
+              required
             />
           </div>
           <div>
@@ -97,6 +102,7 @@ export default function ProjectDetails({
               rows={2}
               type="text-area"
               className="!w-full"
+              required
             />
           </div>
           <div>
@@ -109,6 +115,7 @@ export default function ProjectDetails({
               rows={2}
               type="text-area"
               className="!w-full"
+              required
             />
           </div>
           <div>
@@ -136,6 +143,7 @@ export default function ProjectDetails({
             />
           </div>
         </div>
+        <AlertNotification message={message} status={status} />
         <div className="mt-2 flex flex-1 justify-end gap-2">
           <Button type="primary" htmlType="button" onClick={() => setTab(currentTab - 1)}>
             Prev

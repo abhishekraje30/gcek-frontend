@@ -139,7 +139,7 @@ export default function Profile() {
   ]
 
   return (
-    <main className="grid place-content-center p-2">
+    <main className="grid place-content-center p-8">
       {userRoles.includes(STUDENT_ROLE) ? (
         <div className="flex flex-col gap-4">
           <div className="flex-1">

@@ -16,7 +16,7 @@ export default function CustomOTPInput({ control, name, label, required, ...prop
       control={control}
       render={({ field, fieldState }) => (
         <div className="flex flex-col gap-2">
-          <label htmlFor={name} className="text-sm">
+          <label htmlFor={name} className="text-sm font-semibold">
             {required ? (
               <span>
                 {label} <span className="text-red-500">*</span>

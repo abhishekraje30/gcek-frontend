@@ -57,13 +57,6 @@ export default function PersonalDetails({
     mode: "onBlur",
   })
 
-  // Automatically update form values when userInfo changes
-  useEffect(() => {
-    if (profileData) {
-      reset(getDefaultValues(profileData))
-    }
-  }, [reset, profileData])
-
   const onSubmit: SubmitHandler<zod.infer<typeof StudentPersonalDetailsSchema>> = async (data) => {
     setLoading(true)
     const formattedData = {
