@@ -46,7 +46,7 @@ export default function ProfessionalSummary({
     setLoading(true)
     const formattedData = {
       ...data,
-      profile_completeness: 35,
+      profile_completeness: profileData?.profile_completeness <= 35 ? 35 : profileData?.profile_completeness,
     }
     try {
       await updateStudentProfile(formattedData)

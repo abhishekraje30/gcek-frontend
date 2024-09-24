@@ -62,12 +62,14 @@ export default function PersonalDetails({
     reset(getDefaultValues(profileData))
   }, [profileData, reset])
 
+  console.log("profileData", profileData)
+
   const onSubmit: SubmitHandler<zod.infer<typeof StudentPersonalDetailsSchema>> = async (data) => {
     setLoading(true)
     const formattedData = {
       ...data,
       birth_date: getFrappeDate(data.birth_date),
-      profile_completeness: 10,
+      profile_completeness: profileData?.profile_completeness <= 10 ? 10 : profileData?.profile_completeness,
     }
     try {
       await updateUserData(formattedData)
@@ -118,7 +120,7 @@ export default function PersonalDetails({
 
         <div className="flex flex-col justify-between gap-2 md:flex-row">
           <div className="flex-1">
-            <CustomTextInput name="email" control={control} label="Email" type="email" disabled required />
+            <CustomTextInput name="email" control={control} label="Email" type="email" readOnly required />
           </div>
           <div className="flex-1">
             <CustomTextInput

@@ -78,7 +78,7 @@ export default function AcademicDetails({
     console.log(data)
     const formattedData = {
       ...data,
-      profile_completeness: 25,
+      profile_completeness: profileData?.profile_completeness <= 25 ? 25 : profileData?.profile_completeness,
     }
     try {
       await updateStudentProfile(formattedData)

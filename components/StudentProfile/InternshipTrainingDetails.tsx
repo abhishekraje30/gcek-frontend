@@ -59,8 +59,8 @@ export default function InternshipTrainingDetails({
   const onSubmit: SubmitHandler<zod.infer<typeof InternshipTrainingDetailsSchema>> = async (data) => {
     setLoading(true)
     const formattedData = {
-      profile_completeness: 80,
       ...data,
+      profile_completeness: profileData?.profile_completeness <= 80 ? 80 : profileData?.profile_completeness,
     }
     try {
       await updateStudentProfile(formattedData)
