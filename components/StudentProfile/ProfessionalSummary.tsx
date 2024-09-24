@@ -67,7 +67,7 @@ export default function ProfessionalSummary({
           <div className="w-full flex-1">
             <CustomTextAreaInput
               showCount
-              maxLength={100}
+              maxLength={300}
               control={control}
               name="professional_summary"
               label="Professional Summary"

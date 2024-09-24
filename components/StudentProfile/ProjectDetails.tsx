@@ -12,12 +12,10 @@ import CustomTextInput from "components/FormInputs/CustomTextInput"
 const ProjectDetailsSchema = zod.object({
   project_title: zod
     .string({ required_error: "Project title is required" })
-    .min(3, "Project title should be at least 3 characters long")
-    .max(100, "Project title should be at most 100 characters long"),
+    .min(3, "Project title should be at least 3 characters long"),
   project_summary: zod
     .string({ required_error: "Project summary is required" })
-    .min(10, "Project summary should be at least 10 characters long")
-    .max(100, "Project summary should be at most 100 characters long"),
+    .min(10, "Project summary should be at least 10 characters long"),
   project_description_1: zod.string({ required_error: "Project description is required" }),
   project_description_2: zod.string({ required_error: "Project description is required" }),
   project_description_3: zod.string().optional(),
@@ -69,6 +67,7 @@ export default function ProjectDetails({
       setMessage("Profile updated successfully")
       setStatus("success")
     } catch (error) {
+      debugger
       console.error("Error updating profile:", error)
       setLoading(false)
       setMessage("Error updating profile")
@@ -81,12 +80,19 @@ export default function ProjectDetails({
       <form onSubmit={handleSubmit(onSubmit)} className="flex w-full flex-col gap-6">
         <div className="flex flex-col gap-2">
           <div>
-            <CustomTextInput control={control} name="project_title" label="Project Title" required />
+            <CustomTextInput
+              control={control}
+              name="project_title"
+              label="Project Title"
+              required
+              maxLength={75}
+              showCount
+            />
           </div>
           <div className="w-full flex-1">
             <CustomTextAreaInput
               showCount
-              maxLength={100}
+              maxLength={250}
               control={control}
               name="project_summary"
               label="Brief Description"
@@ -99,7 +105,7 @@ export default function ProjectDetails({
           <div>
             <CustomTextAreaInput
               showCount
-              maxLength={50}
+              maxLength={175}
               control={control}
               name="project_description_1"
               label="Project Description 1"
@@ -112,7 +118,7 @@ export default function ProjectDetails({
           <div>
             <CustomTextAreaInput
               showCount
-              maxLength={50}
+              maxLength={175}
               control={control}
               name="project_description_2"
               label="Project Description 2"
@@ -125,7 +131,7 @@ export default function ProjectDetails({
           <div>
             <CustomTextAreaInput
               showCount
-              maxLength={50}
+              maxLength={175}
               control={control}
               name="project_description_3"
               label="Project Description 3"
@@ -137,7 +143,7 @@ export default function ProjectDetails({
           <div>
             <CustomTextAreaInput
               showCount
-              maxLength={50}
+              maxLength={175}
               control={control}
               name="project_description_4"
               label="Project Description 4"

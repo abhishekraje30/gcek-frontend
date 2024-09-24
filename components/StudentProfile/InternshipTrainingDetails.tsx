@@ -108,7 +108,7 @@ export default function InternshipTrainingDetails({
           <div>
             <CustomTextAreaInput
               showCount
-              maxLength={50}
+              maxLength={175}
               control={control}
               name="responsibility_1"
               label="Responsibility 1"
@@ -121,7 +121,7 @@ export default function InternshipTrainingDetails({
           <div>
             <CustomTextAreaInput
               showCount
-              maxLength={50}
+              maxLength={175}
               control={control}
               name="responsibility_2"
               label="Responsibility 2"
@@ -134,7 +134,7 @@ export default function InternshipTrainingDetails({
           <div>
             <CustomTextAreaInput
               showCount
-              maxLength={50}
+              maxLength={175}
               control={control}
               name="responsibility_3"
               label="Responsibility 3"
