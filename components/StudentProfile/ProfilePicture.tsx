@@ -133,7 +133,6 @@ const ProfilePicture = ({
                   height={300}
                   objectFit="cover"
                 />
-                {/* Button overlay - appears on hover */}
                 <div className="bg-opacity-40/40 absolute inset-0 flex items-center justify-center bg-black opacity-0 transition-opacity duration-300 hover:opacity-75">
                   <Button
                     type="primary"
@@ -145,11 +144,11 @@ const ProfilePicture = ({
                     Change Profile Photo
                   </Button>
                 </div>
-                <div className="flex justify-end gap-2">
-                  <Button type="primary" htmlType="button" onClick={() => setTab(currentTab - 1)}>
-                    Prev
-                  </Button>
-                </div>
+              </div>
+              <div className="flex justify-end gap-2">
+                <Button type="primary" htmlType="button" onClick={() => setTab(currentTab - 1)}>
+                  Prev
+                </Button>
               </div>
             </div>
           ) : (

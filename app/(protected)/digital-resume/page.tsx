@@ -45,8 +45,12 @@ export default function DigitalResume() {
         </div>
         <div className="flex w-[70%] flex-col justify-center pl-8">
           <div className="flex gap-3">
-            <h1 className="text-4xl font-bold tracking-wide">{profileData?.first_name.toUpperCase()}</h1>
-            <h1 className="text-4xl font-bold tracking-wide">{profileData?.last_name.toUpperCase()}</h1>
+            {profileData?.first_name && profileData?.last_name && (
+              <>
+                <h1 className="text-4xl font-bold tracking-wide">{profileData?.first_name.toUpperCase()}</h1>
+                <h1 className="text-4xl font-bold tracking-wide">{profileData?.last_name.toUpperCase()}</h1>
+              </>
+            )}
           </div>
           <h2 className="font-semibold">{profileData?.degree_branch}</h2>
           <hr className="my-2 w-1/12 border-2 border-[#163853]" />
