@@ -59,7 +59,7 @@ export default function SkillDetails({
     setLoading(true)
     const formattedData = {
       ...data,
-      profile_completeness: 45,
+      profile_completeness: profileData?.profile_completeness <= 45 ? 45 : profileData?.profile_completeness,
     }
     try {
       await updateStudentProfile(formattedData)

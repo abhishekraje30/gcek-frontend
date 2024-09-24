@@ -61,8 +61,8 @@ export default function ProjectDetails({
   const onSubmit: SubmitHandler<zod.infer<typeof ProjectDetailsSchema>> = async (data) => {
     setLoading(true)
     const formattedData = {
-      profile_completeness: 70,
       ...data,
+      profile_completeness: profileData?.profile_completeness <= 70 ? 70 : profileData?.profile_completeness,
     }
     try {
       await updateStudentProfile(formattedData)
