@@ -1,6 +1,6 @@
 "use client"
-import { Input, InputProps } from "antd"
-import { Control, Controller } from "react-hook-form"
+import { Input } from "antd"
+import { Controller } from "react-hook-form"
 
 // interface InputFieldProps extends InputProps {
 //   control: Control<any>
