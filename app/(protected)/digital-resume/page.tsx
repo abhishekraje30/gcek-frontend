@@ -27,9 +27,11 @@ export default function DigitalResume() {
     return null
   }
 
+  console.log(profileData)
+
   return (
     <div className="m-4 mx-auto flex h-[297mm] w-[210mm] flex-col overflow-hidden bg-white shadow-lg">
-      <div className="flex h-1/5 w-full">
+      <div className="flex h-1/6 w-full">
         <div className="grid w-[30%] place-content-center bg-[#163852] px-4">
           <div className="grid size-[150px] place-content-center overflow-hidden rounded-full border-2 border-gray-300">
             {profileData?.profile_photo && (
@@ -56,7 +58,7 @@ export default function DigitalResume() {
           <hr className="my-2 w-1/12 border-2 border-[#163853]" />
         </div>
       </div>
-      <div className="flex h-4/5 w-full">
+      <div className="flex h-5/6 w-full">
         <div className="flex h-full w-[30%] flex-col gap-4 bg-[#163852] px-4 text-white">
           <div>
             <h1 className="text-xl font-bold tracking-wider">CONTACT</h1>
@@ -193,6 +195,15 @@ export default function DigitalResume() {
               <li>{profileData?.responsibility_2}</li>
               {profileData?.responsibility_3 && <li>{profileData?.responsibility_3}</li>}
             </ol>
+          </div>
+          <div>
+            <h1 className="text-xl font-bold tracking-wider text-[#163853]">CENTER OF EXCELLENCE</h1>
+            <hr className="my-1 border border-[#163853]" />
+            <h3 className="">
+              {profileData?.center_of_excellence === "Other"
+                ? profileData?.other_center_of_excellence
+                : profileData?.center_of_excellence}
+            </h3>
           </div>
           {/* <div>
             <h1 className="text-xl font-bold tracking-wider text-[#163853]">
