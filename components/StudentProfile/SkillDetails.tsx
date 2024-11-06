@@ -6,8 +6,16 @@ import { SubmitHandler, useForm } from "react-hook-form"
 import * as zod from "zod"
 import AlertNotification from "components/AlertNotification"
 import CustomTextInput from "components/FormInputs/CustomTextInput"
+import CustomSingleSelect from "components/FormInputs/CustomSingleSelect"
+import { COE } from "configs/api-endpoints"
+import { useDropdownOptions } from "hooks/useDropdownOptions"
 
 const SkillDetailsSchema = zod.object({
+  center_of_excellence: zod.string({
+    required_error: "Center of Excellence is required",
+    message: "Please select Center of Excellence",
+  }),
+  other_center_of_excellence: zod.string().optional(),
   tech_skill_1: zod.string({ required_error: "Technical Skill 1 is required" }),
   tech_skill_2: zod.string({ required_error: "Technical Skill 2 is required" }),
   tech_skill_3: zod.string({ required_error: "Technical Skill 3 is required" }),
@@ -20,6 +28,8 @@ const SkillDetailsSchema = zod.object({
 
 function getDefaultValues(userInfo: any): any {
   return {
+    center_of_excellence: userInfo?.center_of_excellence,
+    other_center_of_excellence: userInfo?.other_center_of_excellence,
     tech_skill_1: userInfo?.tech_skill_1,
     tech_skill_2: userInfo?.tech_skill_2,
     tech_skill_3: userInfo?.tech_skill_3,
@@ -45,11 +55,23 @@ export default function SkillDetails({
   const [loading, setLoading] = useState(false)
   const [message, setMessage] = useState("")
   const [status, setStatus] = useState("")
-  const { control, handleSubmit, reset, formState } = useForm({
+  const { control, handleSubmit, reset, formState, watch, setValue } = useForm({
     resolver: zodResolver(SkillDetailsSchema),
     defaultValues: getDefaultValues(profileData),
-    mode: "onBlur",
+    mode: "onSubmit",
   })
+
+  // Watch panel_sub_type changes
+  const coe = watch("center_of_excellence")
+
+  // Effect to set panel_main_type based on panel_sub_type selection
+  useEffect(() => {
+    if (coe !== "Other") {
+      setValue("other_center_of_excellence", "")
+    }
+  }, [coe, setValue])
+
+  const { dropdownOptions: coe_options } = useDropdownOptions(`${COE}?fields=["*"]`, "name")
 
   useEffect(() => {
     reset(getDefaultValues(profileData))
@@ -77,6 +99,25 @@ export default function SkillDetails({
     <div className="flex-1">
       <form onSubmit={handleSubmit(onSubmit)} className="w-full">
         <div className="flex flex-col gap-6">
+          <div className="flex items-center justify-between gap-4">
+            <div className="flex-1">
+              <CustomSingleSelect
+                control={control}
+                name="center_of_excellence"
+                label="Center of Excellence"
+                options={coe_options}
+              />
+            </div>
+            <div className="flex-1">
+              <CustomTextInput
+                control={control}
+                name="other_center_of_excellence"
+                label="Other"
+                disabled={coe !== "Other"}
+              />
+            </div>
+          </div>
+
           <div className="flex flex-col gap-4 md:flex-row">
             <div className="flex-1">
               <h2 className="my-1 font-bold tracking-wide text-gray-700">Technical Skills</h2>
@@ -118,7 +159,7 @@ export default function SkillDetails({
             <Button type="primary" htmlType="button" onClick={() => setTab(currentTab - 1)}>
               Prev
             </Button>
-            <Button type="primary" htmlType="submit" loading={loading} disabled={!formState.isValid}>
+            <Button type="primary" htmlType="submit" loading={loading}>
               Save
             </Button>
             {Object.keys(formState.errors).length === 0 && formState.isValid && (
