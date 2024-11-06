@@ -15,7 +15,17 @@ const config = withPlugins([[withBundleAnalyzer({ enabled: env.ANALYZE })]], {
 
   experimental: { instrumentationHook: false },
   images: {
-    domains: ["127.0.0.1", "gcek-placements.frappe.cloud"],
+    // remotePatterns: ["127.0.0.1", "gcek-placements.frappe.cloud"],
+    remotePatterns: [
+      {
+        protocol: "https",
+        hostname: "gcek-placements.frappe.cloud",
+      },
+      {
+        protocol: "http",
+        hostname: "127.0.0.1",
+      },
+    ],
   },
   rewrites() {
     return [
